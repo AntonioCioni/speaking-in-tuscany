@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>App di italiano · Speaking in Tuscany</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap');
+  :root{--stone:#EDE8DF;--paper:#F8F5EF;--ink:#2B2A26;--muted:#7C776C;--sage:#5E7355;--sage-d:#47593F;--brick:#A6432E;--line:#D8D1C4;--shadow:0 2px 10px rgba(43,42,38,.08);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--stone);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh;padding:22px 14px 40px;}
+  .wrap{max-width:720px;margin:0 auto;}
+  header{text-align:center;margin-bottom:22px;}
+  .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--brick);font-weight:600;}
+  .cypress{display:block;margin:6px auto 2px;}
+  h1{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:clamp(28px,7vw,40px);line-height:1.1;}
+  .sub{color:var(--muted);font-size:14px;margin-top:6px;}
+  .grid{display:grid;gap:12px;}
+  a.card{display:block;text-decoration:none;color:inherit;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow);transition:.15s;}
+  a.card:hover{border-color:var(--sage);transform:translateY(-1px);}
+  .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;}
+  .title{font-family:'Fraunces',Georgia,serif;font-size:22px;font-weight:500;}
+  .tag{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--sage-d);background:#e6ece2;border-radius:999px;padding:3px 10px;white-space:nowrap;}
+  .desc{color:var(--muted);font-size:14.5px;margin-top:4px;}
+  .go{margin-top:10px;font-size:14px;font-weight:600;color:var(--brick);}
+  footer{text-align:center;margin-top:30px;color:var(--muted);font-size:12.5px;}
+  footer a{color:var(--brick);text-decoration:none;font-weight:600;}
+  footer .brand{font-family:'Fraunces',Georgia,serif;font-size:15px;color:var(--ink);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Speaking in Tuscany</div>
+    <svg class="cypress" width="70" height="30" viewBox="0 0 70 30" aria-hidden="true">
+      <path d="M0 29 Q18 22 35 25 T70 24" stroke="#D8D1C4" stroke-width="2" fill="none"/>
+      <path d="M22 28 C17 20 18 8 22 1 C26 8 27 20 22 28Z" fill="#47593F"/>
+      <path d="M35 28 C29 18 30 6 35 -2 C40 6 41 18 35 28Z" fill="#5E7355"/>
+      <path d="M48 28 C43 20 44 9 48 3 C52 9 53 20 48 28Z" fill="#47593F"/>
+    </svg>
+    <h1>Le nostre app</h1>
+    <div class="sub">Esercizi per studiare italiano · Practice apps for learning Italian</div>
+  </header>
+  <main class="grid" id="list"></main>
+  <footer>
+    <div class="brand">Speaking in Tuscany</div>
+    <div><a href="https://www.italianinanghiari.it" target="_blank" rel="noopener">www.italianinanghiari.it</a> · Anghiari, Toscana</div>
+  </footer>
+</div>
+<script>
+/* ===== PER AGGIUNGERE UNA NUOVA APP: copia una riga qui sotto e cambia i testi.
+   href = nome della cartella (con / finale). ===== */
+const APPS=[
+  {title:'Accordo',tag:'A1 – B1',desc:'Nome e aggettivo vanno d\'accordo: teoria ed esercizi su genere e numero.',href:'accordo/'}
+];
+document.getElementById('list').innerHTML=APPS.map(a=>`<a class="card" href="${a.href}"><div class="row"><span class="title">${a.title}</span><span class="tag">${a.tag}</span></div><div class="desc">${a.desc}</div><div class="go">Apri →</div></a>`).join('');
+</script>
+</body>
+</html>

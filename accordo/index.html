@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accordo · Speaking in Tuscany</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --stone:#EDE8DF; --paper:#F8F5EF; --ink:#2B2A26; --muted:#7C776C;
+    --sage:#5E7355; --sage-d:#47593F; --brick:#A6432E; --brick-l:#C56A54;
+    --line:#D8D1C4; --gold:#C6923A; --ok:#4B6B4A; --no:#A6432E;
+    --shadow:0 2px 10px rgba(43,42,38,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--stone);color:var(--ink);line-height:1.5;
+    -webkit-font-smoothing:antialiased;min-height:100vh;padding:18px 14px 40px;}
+  .wrap{max-width:720px;margin:0 auto;}
+  button{font-family:inherit;cursor:pointer;}
+  .serif{font-family:'Fraunces',Georgia,serif;}
+
+  /* header */
+  header{text-align:center;margin-bottom:16px;}
+  .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--brick);font-weight:600;}
+  .cypress{display:block;margin:6px auto 2px;}
+  h1{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:clamp(30px,7vw,42px);line-height:1.05;}
+  .sub{color:var(--muted);font-size:14px;margin-top:4px;}
+  .toolbar{display:flex;justify-content:flex-end;margin:10px 0 14px;}
+  .toggle{display:inline-flex;align-items:center;gap:8px;background:var(--paper);border:1px solid var(--line);
+    border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600;color:var(--muted);box-shadow:var(--shadow);}
+  .toggle .dot{width:30px;height:18px;border-radius:999px;background:var(--line);position:relative;transition:.2s;}
+  .toggle .dot::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:.2s;}
+  .toggle.on{color:var(--sage-d);border-color:var(--sage);}
+  .toggle.on .dot{background:var(--sage);}
+  .toggle.on .dot::after{left:14px;}
+
+  /* cards & buttons */
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);}
+  .grid{display:grid;gap:12px;}
+  .grid.two{grid-template-columns:1fr 1fr;}
+  @media (max-width:430px){.grid.two{grid-template-columns:1fr 1fr;gap:10px;}}
+  .btn{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:12px;padding:12px 16px;
+    font-size:15px;font-weight:600;transition:.15s;}
+  .btn:hover{border-color:var(--sage);}
+  .btn.primary{background:var(--sage);border-color:var(--sage);color:#fff;}
+  .btn.primary:hover{background:var(--sage-d);}
+  .btn.ghost{background:transparent;}
+  .btn.small{padding:7px 12px;font-size:13px;border-radius:9px;}
+  .btn.theory{color:var(--brick);border-color:var(--brick-l);background:#fff7f3;}
+  .back{background:none;border:none;color:var(--muted);font-size:14px;font-weight:600;padding:6px 0;}
+
+  /* level cards */
+  .level{display:flex;gap:14px;align-items:center;text-align:left;width:100%;padding:14px 16px;}
+  .level .num{flex:none;width:44px;height:44px;border-radius:50%;background:var(--sage);color:#fff;display:grid;place-items:center;
+    font-family:'Fraunces',Georgia,serif;font-size:21px;font-weight:600;}
+  .level.mix .num{background:var(--brick);}
+  .level .meta{flex:1;min-width:0;}
+  .level .title{font-weight:600;font-size:16px;}
+  .level .ex{font-family:'Fraunces',Georgia,serif;font-style:italic;color:var(--muted);font-size:16px;}
+  .stars{font-size:18px;letter-spacing:2px;color:var(--line);white-space:nowrap;}
+  .stars b{color:var(--gold);font-weight:400;}
+  .lvl-row{display:flex;gap:8px;align-items:stretch;}
+  .lvl-row .level{flex:1;}
+  .lvl-row .btn.theory{flex:none;writing-mode:horizontal-tb;padding:0 12px;}
+
+  /* exercise menu */
+  .ex-btn{text-align:left;padding:14px;display:flex;flex-direction:column;gap:2px;min-height:84px;}
+  .ex-btn .t{font-weight:600;font-size:16px;}
+  .ex-btn .d{font-size:12.5px;color:var(--muted);font-weight:400;}
+  .ex-btn.timed{border-color:var(--brick-l);}
+  .section-title{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:4px 2px 10px;}
+
+  /* session */
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;}
+  .progress{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin-bottom:14px;}
+  .progress i{display:block;height:100%;background:var(--sage);transition:width .3s;}
+  .progress.time i{background:var(--brick);transition:width .1s linear;}
+  .prompt{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--brick);font-weight:600;}
+  .hint{font-size:13px;color:var(--muted);margin-bottom:10px;}
+  .q{font-family:'Fraunces',Georgia,serif;font-size:clamp(26px,6.4vw,38px);line-height:1.3;margin:12px 0 18px;font-weight:500;}
+  .q .blank{display:inline-block;min-width:1.6em;border-bottom:3px solid var(--brick);color:var(--brick);text-align:center;padding:0 2px;}
+  .q .blank.right{border-color:var(--ok);color:var(--ok);}
+  .q .blank.wrong{border-color:var(--no);color:var(--no);}
+  body.insess .sub,body.insess .cypress{display:none;}
+  body.insess header{margin-bottom:6px;}
+  body.insess .toolbar{margin:6px 0 8px;}
+  .sheet td.nw{white-space:nowrap;font-size:13px;font-family:'Inter',sans-serif;color:var(--muted);}
+  .q .arrow{color:var(--muted);font-size:.8em;margin-right:6px;}
+  .showen .w{border-bottom:2px dotted var(--sage);cursor:help;}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .opt{padding:16px 10px;font-size:20px;font-family:'Fraunces',Georgia,serif;font-weight:500;border-radius:14px;min-height:60px;
+    background:var(--paper);border:2px solid var(--line);color:var(--ink);}
+  .opt:hover:not(:disabled){border-color:var(--sage);}
+  .opt.right{background:var(--ok);border-color:var(--ok);color:#fff;}
+  .opt.wrong{background:var(--no);border-color:var(--no);color:#fff;}
+  .opt:disabled{cursor:default;}
+  .err-item{display:block;width:100%;text-align:left;padding:14px 16px;font-family:'Fraunces',Georgia,serif;font-size:clamp(20px,5vw,26px);
+    background:var(--paper);border:2px solid var(--line);border-radius:14px;margin-bottom:10px;color:var(--ink);}
+  .err-item:hover:not(:disabled){border-color:var(--sage);}
+  .err-item.right{background:var(--ok);border-color:var(--ok);color:#fff;}
+  .err-item.wrong{background:var(--no);border-color:var(--no);color:#fff;}
+  .err-item.reveal{border-color:var(--ok);box-shadow:0 0 0 2px var(--ok) inset;}
+  input.type{font-family:'Fraunces',Georgia,serif;font-size:inherit;border:none;border-bottom:3px solid var(--brick);background:transparent;
+    width:6.5em;text-align:center;color:var(--ink);outline:none;padding:0 4px;}
+  .answer-area{min-height:64px;border:2px dashed var(--line);border-radius:14px;padding:10px;display:flex;flex-wrap:wrap;gap:8px;
+    margin-bottom:12px;align-items:center;background:var(--paper);}
+  .tiles{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .tile{font-family:'Fraunces',Georgia,serif;font-size:22px;padding:10px 16px;border-radius:12px;background:#fff;border:2px solid var(--line);color:var(--ink);}
+  .tile:hover{border-color:var(--sage);}
+  .tile.used{opacity:.25;pointer-events:none;}
+  .answer-area .tile{background:var(--sage);color:#fff;border-color:var(--sage);}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;}
+  .feedback{margin-top:16px;border-radius:14px;padding:14px 16px;border:1px solid var(--line);background:var(--paper);}
+  .feedback.ok{border-color:var(--ok);background:#eef3ec;}
+  .feedback.no{border-color:var(--brick-l);background:#fbf0ec;}
+  .feedback h3{font-size:17px;margin-bottom:4px;}
+  .feedback.ok h3{color:var(--ok);} .feedback.no h3{color:var(--brick);}
+  .feedback .why{font-size:15px;}
+  .feedback .rule{font-size:13.5px;color:var(--muted);margin-top:4px;}
+  .feedback .gloss{font-size:13px;color:var(--muted);margin-top:4px;font-style:italic;}
+  .feedback .actions{margin-top:12px;}
+  .timer-score{font-family:'Fraunces',Georgia,serif;font-size:22px;}
+
+  /* result */
+  .result{text-align:center;padding:26px 18px;}
+  .result .big{font-family:'Fraunces',Georgia,serif;font-size:56px;line-height:1;margin:8px 0;}
+  .result .stars{font-size:38px;margin:6px 0;}
+  .result p{color:var(--muted);margin-bottom:12px;}
+  .mistakes{text-align:left;margin:14px 0;border-top:1px solid var(--line);padding-top:10px;font-size:15px;}
+  .mistakes div{padding:4px 0;font-family:'Fraunces',Georgia,serif;}
+  .mistakes b{color:var(--ok);font-weight:600;}
+
+  /* modal */
+  #modal{position:fixed;inset:0;background:rgba(43,42,38,.55);display:none;align-items:flex-end;justify-content:center;z-index:50;padding:0;}
+  #modal.open{display:flex;}
+  .sheet{background:var(--paper);width:100%;max-width:680px;max-height:88vh;overflow:auto;border-radius:20px 20px 0 0;padding:20px 20px 28px;}
+  @media (min-width:700px){#modal{align-items:center;} .sheet{border-radius:20px;}}
+  .sheet h2{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:26px;margin-bottom:2px;}
+  .sheet .eyebrow{margin-bottom:6px;}
+  .sheet p{margin:10px 0;font-size:16px;}
+  .sheet table{width:100%;border-collapse:collapse;margin:10px 0;font-size:16px;table-layout:auto;}
+  .sheet th{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:6px 8px;border-bottom:2px solid var(--line);}
+  .sheet td{padding:8px 5px;border-bottom:1px solid var(--line);font-family:'Fraunces',Georgia,serif;font-size:17px;}
+  @media (max-width:420px){.sheet td{font-size:15.5px;padding:8px 4px;}.sheet th{padding:6px 4px;font-size:10.5px;}}
+  .sheet td.k{font-family:'Inter',sans-serif;font-size:13px;color:var(--muted);}
+  .sheet .ex{font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:19px;line-height:1.5;}
+  .sheet .tip{background:#f6ecd5;border-left:4px solid var(--gold);border-radius:8px;padding:10px 12px;font-size:15px;margin:12px 0;}
+  .sheet .close{margin-top:14px;width:100%;}
+
+  #bubble{position:fixed;z-index:60;background:var(--ink);color:#fff;font-size:14px;padding:6px 10px;border-radius:8px;display:none;pointer-events:none;
+    max-width:220px;box-shadow:0 4px 14px rgba(0,0,0,.25);}
+
+  footer{text-align:center;margin-top:30px;color:var(--muted);font-size:12.5px;}
+  footer a{color:var(--brick);text-decoration:none;font-weight:600;}
+  footer .brand{font-family:'Fraunces',Georgia,serif;font-size:15px;color:var(--ink);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Speaking in Tuscany</div>
+    <svg class="cypress" width="70" height="30" viewBox="0 0 70 30" aria-hidden="true">
+      <path d="M0 29 Q18 22 35 25 T70 24" stroke="#D8D1C4" stroke-width="2" fill="none"/>
+      <path d="M22 28 C17 20 18 8 22 1 C26 8 27 20 22 28Z" fill="#47593F"/>
+      <path d="M35 28 C29 18 30 6 35 -2 C40 6 41 18 35 28Z" fill="#5E7355"/>
+      <path d="M48 28 C43 20 44 9 48 3 C52 9 53 20 48 28Z" fill="#47593F"/>
+    </svg>
+    <h1>Accordo</h1>
+    <div class="sub">Nome e aggettivo vanno d'accordo · Noun–adjective agreement</div>
+  </header>
+  <div class="toolbar"><button class="toggle" id="enToggle" type="button"><span>Mostra inglese</span><span class="dot"></span></button></div>
+  <main id="app"></main>
+  <footer>
+    <div class="brand">Speaking in Tuscany</div>
+    <div><a href="https://www.italianinanghiari.it" target="_blank" rel="noopener">www.italianinanghiari.it</a> · Anghiari, Toscana</div>
+    <div style="margin-top:6px"><a href="../">← Tutte le app</a></div>
+  </footer>
+</div>
+
+<div id="modal" role="dialog" aria-modal="true"><div class="sheet" id="sheet"></div></div>
+<div id="bubble"></div>
+
+<script>
+/* ============ UTIL ============ */
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm=s=>s.trim().toLowerCase().replace(/[’`´]/g,"'");
+const store=(()=>{const mem={};return{
+  get(k,d){try{const v=localStorage.getItem('accordo_'+k);return v==null?(k in mem?mem[k]:d):JSON.parse(v);}catch(e){return k in mem?mem[k]:d;}},
+  set(k,v){mem[k]=v;try{localStorage.setItem('accordo_'+k,JSON.stringify(v));}catch(e){}}};})();
+
+/* ============ DATA: NOUNS ============ */
+// k = kinds: P person, A animal, O object, S furniture, V vehicle/device, C place, R readable, T abstract, N night, F food, B body, M nature
+const N=(s,p,g,ds,dp,is,k,en,x={})=>({s,p,g,pg:x.pg||g,ds,dp,is,k,en,nopl:!!x.nopl});
+const NOUNS1=[
+ N('ragazzo','ragazzi','m','il','i','un','P','boy'),
+ N('ragazza','ragazze','f','la','le','una','P','girl'),
+ N('bambino','bambini','m','il','i','un','P','child (boy)'),
+ N('bambina','bambine','f','la','le','una','P','child (girl)'),
+ N('libro','libri','m','il','i','un','OR','book'),
+ N('casa','case','f','la','le','una','OH','house'),
+ N('gatto','gatti','m','il','i','un','A','cat'),
+ N('macchina','macchine','f','la','le','una','OV','car'),
+ N('tavolo','tavoli','m','il','i','un','OS','table'),
+ N('sedia','sedie','f','la','le','una','OS','chair'),
+ N('vestito','vestiti','m','il','i','un','OW','dress'),
+ N('borsa','borse','f','la','le','una','OW','bag'),
+ N('treno','treni','m','il','i','un','OV','train'),
+ N('camera','camere','f','la','le','una','OH','room'),
+ N('quaderno','quaderni','m','il','i','un','OR','notebook'),
+ N('strada','strade','f','la','le','una','CE','road')
+];
+const NOUNS2=[
+ N('fiore','fiori','m','il','i','un','OM','flower'),
+ N('cane','cani','m','il','i','un','A','dog'),
+ N('ristorante','ristoranti','m','il','i','un','CK','restaurant'),
+ N('giornale','giornali','m','il','i','un','OR','newspaper'),
+ N('mare','mari','m','il','i','un','Y','sea'),
+ N('dottore','dottori','m','il','i','un','P','doctor'),
+ N('padre','padri','m','il','i','un','P','father'),
+ N('pane','pani','m','il','i','un','F','bread',{nopl:true}),
+ N('notte','notti','f','la','le','una','N','night'),
+ N('madre','madri','f','la','le','una','P','mother'),
+ N('lezione','lezioni','f','la','le','una','T','lesson'),
+ N('stazione','stazioni','f','la','le','una','C','station'),
+ N('chiave','chiavi','f','la','le','una','O','key'),
+ N('classe','classi','f','la','le','una','CT','class'),
+ N('canzone','canzoni','f','la','le','una','T','song'),
+ N('televisione','televisioni','f','la','le','una','OV','television')
+];
+const NOUNS6=[
+ N('problema','problemi','m','il','i','un','T','problem'),
+ N('programma','programmi','m','il','i','un','T','program'),
+ N('tema','temi','m','il','i','un','T','theme / essay'),
+ N('mano','mani','f','la','le','una','B','hand'),
+ N('braccio','braccia','m','il','le','un','B','arm',{pg:'f'}),
+ N('uovo','uova','m',"l'",'le','un','F','egg',{pg:'f'}),
+ N('dito','dita','m','il','le','un','B','finger',{pg:'f'}),
+ N('foto','foto','f','la','le','una','O','photo'),
+ N('moto','moto','f','la','le','una','OV','motorbike'),
+ N('radio','radio','f','la','le','una','OV','radio'),
+ N('cinema','cinema','m','il','i','un','CK','cinema'),
+ N('caffè','caffè','m','il','i','un','F','coffee'),
+ N('città','città','f','la','le','una','CK','city'),
+ N('bar','bar','m','il','i','un','CK','café / bar'),
+ N('autobus','autobus','m',"l'",'gli','un','OV','bus'),
+ N('turista','turisti','m','il','i','un','P','tourist'),
+ N('turista','turiste','f','la','le','una','P','tourist'),
+ N('collega','colleghi','m','il','i','un','P','colleague'),
+ N('collega','colleghe','f','la','le','una','P','colleague'),
+ N('cantante','cantanti','m','il','i','un','P','singer'),
+ N('cantante','cantanti','f','la','le','una','P','singer'),
+ N('uomo','uomini','m',"l'",'gli','un','P','man'),
+ N('zaino','zaini','m','lo','gli','uno','O','backpack'),
+ N('albero','alberi','m',"l'",'gli','un','OM','tree'),
+ N('studente','studenti','m','lo','gli','uno','P','student'),
+ N('amico','amici','m',"l'",'gli','un','P','friend'),
+ N('amica','amiche','f',"l'",'le',"un'",'P','friend'),
+ N('occhio','occhi','m',"l'",'gli','un','BQ','eye')
+];
+const NOUNS12=[...NOUNS1,...NOUNS2];
+
+/* ============ DATA: ADJECTIVES ============ */
+const A=(w,cls,en,k)=>({w,cls,en,k,stem:cls==='INV'?w:cls==='IO'?w.slice(0,-2):w.slice(0,-1)});
+const ADJ={
+ O:[A('alto','O','tall','PAMSH'),A('basso','O','short / low','PASH'),A('nuovo','O','new','OVCRT'),
+    A('vecchio','IO','old','PAOVCRTB'),A('rosso','O','red','AOVMB'),A('nero','O','black','AOVMBFQ'),
+    A('giallo','O','yellow','AOVM'),A('piccolo','O','small','PAOCVMBFTQ'),A('carino','O','cute / pretty','PAOCVMT'),
+    A('bravo','O','good / skilled','PA'),A('freddo','O','cold','HCBFNYW'),A('caldo','O','hot / warm','HCBFNYW'),
+    A('lento','O','slow','PAVT'),A('pulito','O','clean','PAOCVBY'),
+    A('aperto','O','open','CRWH'),A('chiuso','O','closed','CRWH'),A('italiano','O','Italian','PKRTFVW'),
+    A('spagnolo','O','Spanish','PKRT'),A('russo','O','Russian','PKRT'),A('indiano','O','Indian','PKRT')],
+ E:[A('grande','E','big','PAOCVMBFTY'),A('verde','E','green','AOVMQY'),A('felice','E','happy','PA'),
+    A('forte','E','strong','PAVBT'),A('intelligente','E','intelligent','PA'),A('difficile','E','difficult','RTE'),
+    A('facile','E','easy','RTE'),A('gentile','E','kind','PA'),A('veloce','E','fast','PAV'),
+    A('triste','E','sad','PATN'),A('interessante','E','interesting','PRTK'),A('dolce','E','sweet','PFTN'),
+    A('inglese','E','English','PKRTFVW'),A('francese','E','French','PKRTFVW'),A('cinese','E','Chinese','PKRTFVW'),
+    A('olandese','E','Dutch','PKRT')],
+ ISTA:[A('ottimista','ISTA','optimistic','P'),A('pessimista','ISTA','pessimistic','P'),A('egoista','ISTA','selfish','P')],
+ ICO:[A('simpatico','ICO','nice / likeable','PA'),A('pratico','ICO','practical','OVTCR'),A('elettrico','ICO','electric','V'),
+      A('fantastico','ICO','fantastic','PAOCVRTFMNY'),A('tipico','ICO','typical','CRTFH')],
+ CO:[A('bianco','CO','white','AOVMBF'),A('sporco','CO','dirty','PAOCVBY'),A('stanco','CO','tired','PA'),A('ricco','CO','rich','P'),
+     A('fresco','CO','fresh','FMN'),A('tedesco','CO','German','PKRTFVW'),A('polacco','CO','Polish','PKRTFVW')],
+ GO:[A('lungo','GO','long','ENTBRV'),A('largo','GO','wide','ESH')],
+ INV:[A('blu','INV','blue','AOVMSQY'),A('rosa','INV','pink','AOVMS'),A('viola','INV','purple','AOVMS'),A('beige','INV','beige','OVS')]
+};
+const ALL_ADJ=Object.values(ADJ).flat();
+const byW=w=>ALL_ADJ.find(a=>a.w===w);
+const COLORS_VAR=['rosso','nero','giallo','verde'].map(byW);
+const SENT_ADJ=['nuovo','vecchio','piccolo','grande','carino'].map(byW);
+
+const RULE={
+ O:'Adjectives in -o: -o (m. sg.) · -a (f. sg.) · -i (m. pl.) · -e (f. pl.)',
+ IO:'Adjectives in -io: -io · -ia · -i · -ie (vecchio → vecchi, with one i)',
+ E:'Adjectives in -e: -e (singular) · -i (plural), the same for masculine and feminine.',
+ ISTA:'Adjectives in -ista: same in the singular; plural -i (m.) / -e (f.).',
+ ICO:'-ico → -ica · -ici · -iche',
+ CO:'-co → -ca · -chi · -che (the h keeps the hard sound)',
+ GO:'-go → -ga · -ghi · -ghe (the h keeps the hard sound)',
+ INV:'blu, rosa, viola, beige never change.'
+};
+const INVD={blu:['blue','blui','bla'],rosa:['rose','rosi','roso'],viola:['viole','violi','violo'],beige:['beigi','beiga','beigo']};
+
+function forms(a){const s=a.stem,w=a.w;switch(a.cls){
+ case 'O':return{ms:w,fs:s+'a',mp:s+'i',fp:s+'e'};
+ case 'IO':return{ms:w,fs:s+'ia',mp:s+'i',fp:s+'ie'};
+ case 'E':return{ms:w,fs:w,mp:s+'i',fp:s+'i'};
+ case 'ISTA':return{ms:w,fs:w,mp:s+'i',fp:s+'e'};
+ case 'ICO':return{ms:w,fs:s+'a',mp:s+'i',fp:s+'he'};
+ case 'CO':case 'GO':return{ms:w,fs:s+'a',mp:s+'hi',fp:s+'he'};
+ default:return{ms:w,fs:w,mp:w,fp:w};}}
+const adjForm=(a,g,num)=>forms(a)[g+num];
+const gOf=(n,num)=>num==='s'?n.g:n.pg;
+const compat=(n,a)=>[...a.k].some(c=>n.k.includes(c));
+function pairs(nouns,adjs){const r=[];nouns.forEach(n=>adjs.forEach(a=>{if(compat(n,a))r.push([n,a]);}));return r;}
+const PAIRS={
+ 1:pairs(NOUNS1,ADJ.O),
+ 2:pairs(NOUNS2,ADJ.O),
+ 3:pairs(NOUNS12,[...ADJ.E,...ADJ.ISTA]),
+ 4:pairs(NOUNS12,[...ADJ.ICO,...ADJ.CO,...ADJ.GO]),
+ 5:[...pairs(NOUNS12,ADJ.INV),...pairs(NOUNS12,ADJ.INV),...pairs(NOUNS12,COLORS_VAR)],
+ 6:pairs(NOUNS6,ALL_ADJ)
+};
+
+/* ============ BELLO / QUELLO ============ */
+const VOW=/^[aeiouàèéìòù]/i, CLU=/^(s[^aeiou]|z|gn|ps)/i;
+function belloW(w,g,num){
+ if(g==='f')return num==='s'?(VOW.test(w)?"bell'":'bella'):'belle';
+ if(num==='s')return VOW.test(w)?"bell'":(CLU.test(w)?'bello':'bel');
+ return(VOW.test(w)||CLU.test(w))?'begli':'bei';}
+function quelloW(w,g,num){
+ if(g==='f')return num==='s'?(VOW.test(w)?"quell'":'quella'):'quelle';
+ if(num==='s')return VOW.test(w)?"quell'":(CLU.test(w)?'quello':'quel');
+ return(VOW.test(w)||CLU.test(w))?'quegli':'quei';}
+const BELS=['bel','bello',"bell'",'bella','bei','begli','belle'];
+const QUELS=['quel','quello',"quell'",'quella','quei','quegli','quelle'];
+function whyBQ(w,g,num,form){
+ if(g==='f')return num==='s'?(VOW.test(w)?`${w} starts with a vowel → ${form}`:`feminine singular → ${form}`):`feminine plural → ${form}`;
+ if(num==='s')return VOW.test(w)?`${w} starts with a vowel → ${form}`:(CLU.test(w)?`${w} starts with s + consonant or z → ${form}`:`masculine singular → ${form}`);
+ return(VOW.test(w)||CLU.test(w))?`${w}: plural before a vowel, s + consonant or z → ${form}`:`masculine plural → ${form}`;}
+const RULE_BQ={
+ bello:"Bello follows the definite article: il → bel · i → bei · lo → bello · gli → begli · l' → bell' · la → bella · le → belle",
+ quello:"Quello follows the same pattern as bello: il → quel · i → quei · lo → quello · gli → quegli · l' → quell' · la → quella · le → quelle"};
+
+/* ============ PHRASE BUILDERS ============ */
+function ntoks(n,num,det){
+ const t=[];
+ if(num==='s')t.push({t:det==='def'?n.ds:n.is});else t.push({t:det==='def'?n.dp:'due'});
+ t.push({t:num==='s'?n.s:n.p,en:n.en});return t;}
+const verbTok=num=>({t:num==='s'?'è':'sono'});
+const plainText=tokens=>tokens.map((tk,i)=>(i&&!/'$/.test(tokens[i-1].t)?' ':'')+(tk.blank&&tk.fill?tk.fill:tk.t)+(tk.post||'')).join('');
+function capFirst(tokens){const c=tokens.map(x=>({...x}));c[0].t=cap(c[0].t);return c;}
+function toHTML(tokens,{tips=true,fill=null}={}){
+ let h='';
+ tokens.forEach((tk,i)=>{
+  if(i&&!/'$/.test(tokens[i-1].t))h+=' ';
+  const post=tk.post||'';
+  if(tk.input){h+=`<input class="type" id="typed" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="risposta">${esc(post)}`;return;}
+  if(tk.blank){
+    if(fill)h+=`<span class="blank right">${esc(tk.fill)}</span>${esc(post)}`;
+    else h+=`<span class="blank">${esc(tk.t)}</span>${esc(post)}`;
+    return;}
+  if(tk.en&&tips)h+=`<span class="w" data-en="${esc(tk.en)}">${esc(tk.t)}</span>${esc(post)}`;
+  else h+=esc(tk.t)+esc(post);
+ });
+ return h;}
+
+/* ============ QUESTION GENERATORS ============ */
+function pick(level,o={}){
+ let list=PAIRS[level];if(o.noInv)list=list.filter(p=>p[1].cls!=='INV');
+ const [n,a]=rnd(list);
+ const num=n.nopl?'s':rnd(['s','p']);
+ const det=num==='s'?rnd(['def','indef']):rnd(['def','due']);
+ return{n,a,num,det};}
+
+function adjBase(level,o={}){
+ const {n,a,num,det}=pick(level,o);
+ const g=gOf(n,num),form=adjForm(a,g,num);
+ const sentence=!!o.sentence||(o.sentence===undefined&&Math.random()<.4);
+ const mk=(adjTok,nn=n,nnum=num)=>{
+   if(sentence){const t=capFirst(ntoks(nn,nnum,'def'));t.push(verbTok(nnum));t.push({...adjTok,post:'.'});return t;}
+   return[...ntoks(nn,nnum,det),adjTok];};
+ const w=num==='s'?n.s:n.p;
+ return{n,a,num,g,form,det,sentence,mk,
+  why:`${w} → ${g==='m'?'masculine':'feminine'} ${num==='s'?'singular':'plural'} → ${form}`,
+  rule:RULE[a.cls],gloss:[[w,n.en],[form,a.en]]};}
+
+function formOptions(a,correct){
+ let all=[...new Set(Object.values(forms(a)))];
+ let extra=a.cls==='INV'?INVD[a.w]:a.cls==='IO'?[a.stem+'ii']:[a.stem+'o',a.stem+'a'];
+ const pool=shuffle([...new Set([...all,...extra])].filter(x=>x!==correct));
+ return shuffle([correct,...pool.slice(0,3)]);}
+
+// bello / quello item
+function bq(kind){
+ const n=rnd(Math.random()<.65?NOUNS6:NOUNS12);
+ const num=n.nopl?'s':rnd(['s','p']);
+ const w=num==='s'?n.s:n.p,g=gOf(n,num);
+ const fn=kind==='bello'?belloW:quelloW;
+ return{kind,n,num,w,g,form:fn(w,g,num),fn};}
+function bqToks(x,blankForm){
+ const ft=blankForm?blankForm:{t:x.form,en:x.kind==='bello'?'beautiful':'that'};
+ const noun={t:x.w,en:x.n.en};
+ if(x.kind==='bello')return[{t:x.num==='s'?(x.g==='m'?'un':'una'):'due'},ft,noun];
+ return[ft,noun];}
+function bqSentence(x,blankForm,wrongForm){
+ // quello only: "Quel libro è nuovo."
+ const cand=SENT_ADJ.filter(a=>compat(x.n,a)&&true);
+ let ft=blankForm||{t:wrongForm||x.form,en:'that'};
+ if(x.kind==='quello'&&cand.length){
+   const a=rnd(cand);const adjF=adjForm(a,x.g,x.num);
+   if(ft.blank)ft={...ft,fill:cap(ft.fill)};
+   const t=capFirst([ft,{t:x.w,en:x.n.en}]);
+   return{tokens:[...t,verbTok(x.num),{t:adjF,en:a.en,post:'.'}],sentence:true};}
+ return{tokens:bqToks(x,blankForm||(wrongForm?{t:wrongForm,en:'beautiful'}:null)),sentence:false};}
+function bqOptions(x){
+ const set=x.kind==='bello'?BELS:QUELS;
+ const samePl=set.filter(f=>f!==x.form&&(x.num==='s'?['bel','bello',"bell'",'bella',"quel",'quello',"quell'",'quella'].includes(f):['bei','begli','belle','quei','quegli','quelle'].includes(f)));
+ const others=shuffle(set.filter(f=>f!==x.form));
+ const pool=[...shuffle(samePl),...others.filter(f=>!samePl.includes(f))];
+ return shuffle([x.form,...pool.slice(0,3)]);}
+const bqGloss=x=>[[x.w,x.n.en]];
+
+function qComplete(L){
+ const b=adjBase(L,{noInv:true});
+ const stem=b.a.stem,end=b.form.slice(stem.length);
+ const pool=['ICO','CO','GO'].includes(b.a.cls)?['o','a','i','e','hi','he']:b.a.cls==='IO'?['io','ia','i','ie','o','e']:['o','a','i','e'];
+ const opts=shuffle([end,...shuffle(pool.filter(x=>x!==end)).slice(0,3)]);
+ const tokens=b.mk({t:stem+'__',blank:true,fill:b.form,en:b.a.en});
+ return{type:'complete',lvl:L,prompt:'Completa',hint:'Scegli la desinenza giusta · Choose the right ending',tokens,
+  options:opts.map(x=>({label:'-'+x,val:x})),answer:end,why:b.why,rule:b.rule,gloss:b.gloss};}
+
+function qChoose(L){
+ if(L===6&&Math.random()<.55){
+   const x=bq(rnd(['bello','quello']));
+   const s=bqSentence(x,{t:'___',blank:true,fill:x.form,en:x.kind==='bello'?'beautiful':'that'});
+   const opts=bqOptions(x);
+   return{type:'choose',lvl:L,prompt:'Scegli la forma giusta',hint:'Scegli la forma giusta · Choose the right form',tokens:s.tokens,
+    options:opts.map(v=>({label:v,val:v})),answer:x.form,why:whyBQ(x.w,x.g,x.num,x.form),rule:RULE_BQ[x.kind],gloss:bqGloss(x)};}
+ const b=adjBase(L);
+ const tokens=b.mk({t:'___',blank:true,fill:b.form,en:b.a.en});
+ const opts=formOptions(b.a,b.form);
+ return{type:'choose',lvl:L,prompt:'Scegli la forma giusta',hint:'Scegli la forma giusta · Choose the right form',tokens,
+  options:opts.map(v=>({label:v,val:v})),answer:b.form,why:b.why,rule:b.rule,gloss:b.gloss};}
+
+function qTransform(L){
+ if(L===6&&Math.random()<.55){
+   const x=bq(rnd(['bello','quello']));
+   const num2=x.num==='s'?'p':'s';
+   if(x.n.nopl){return qTransform(L);}
+   const w2=num2==='s'?x.n.s:x.n.p,g2=gOf(x.n,num2),f2=x.fn(w2,g2,num2);
+   const t1=bqToks(x);
+   const t2=bqToks({...x,num:num2,w:w2,g:g2,form:f2},{t:'',input:true,fill:f2});
+   return{type:'transform',lvl:L,prompt:num2==='p'?'Dal singolare al plurale':'Dal plurale al singolare',
+    hint:'Scrivi la forma giusta · Type the right form',tokens:t1,tokens2:t2,answer:f2,
+    why:whyBQ(w2,g2,num2,f2),rule:RULE_BQ[x.kind],gloss:[[x.w,x.n.en],[w2,x.n.en]]};}
+ let b;for(let i=0;i<30;i++){b=adjBase(L,{sentence:false});if(!b.n.nopl)break;}
+ if(b.n.nopl)return qTransform(L);
+ const num2=b.num==='s'?'p':'s',g2=gOf(b.n,num2),f2=adjForm(b.a,g2,num2);
+ const det1=b.num==='s'?'indef':'due',det2=num2==='s'?'indef':'due';
+ const t1=[...ntoks(b.n,b.num,det1),{t:b.form,en:b.a.en}];
+ const t2=[...ntoks(b.n,num2,det2),{t:'',input:true,fill:f2}];
+ const w2=num2==='s'?b.n.s:b.n.p;
+ return{type:'transform',lvl:L,prompt:num2==='p'?'Dal singolare al plurale':'Dal plurale al singolare',
+  hint:'Scrivi la forma giusta · Type the right form',tokens:t1,tokens2:t2,answer:f2,
+  why:`${w2} → ${g2==='m'?'masculine':'feminine'} ${num2==='s'?'singular':'plural'} → ${f2}`,rule:RULE[b.a.cls],gloss:[[w2,b.n.en],[f2,b.a.en]]};}
+
+function errItem(L){
+ if(L===6&&Math.random()<.5){
+   const x=bq(rnd(['bello','quello']));
+   const good=bqSentence(x);
+   const wrongForm=rnd((x.kind==='bello'?BELS:QUELS).filter(f=>f!==x.form));
+   // rebuild same sentence with wrong determiner
+   const bad=good.tokens.map(t=>({...t}));
+   const idx=x.kind==='bello'?1:0;
+   bad[idx].t=idx===0&&good.sentence?cap(wrongForm):wrongForm;
+   if(idx===0&&!good.sentence)bad[idx].t=wrongForm;
+   const goodT=good.tokens.map(t=>({...t}));
+   return{good:goodT,bad,goodText:plainText(goodT),badText:plainText(bad),rule:RULE_BQ[x.kind],why:whyBQ(x.w,x.g,x.num,x.form),gloss:bqGloss(x)};}
+ const b=adjBase(L,{sentence:true});
+ const others=Object.values(forms(b.a)).filter(f=>f!==b.form);
+ const wrong=b.a.cls==='INV'?rnd(INVD[b.a.w]):rnd([...new Set(others)].length?[...new Set(others)]:[b.a.stem+'o']);
+ const good=b.mk({t:b.form,en:b.a.en}),bad=b.mk({t:wrong,en:b.a.en});
+ return{good,bad,goodText:plainText(good),badText:plainText(bad),rule:b.rule,why:b.why,gloss:b.gloss};}
+
+function qError(L){
+ const items=[];const seen=new Set();
+ while(items.length<3){const it=errItem(L);if(!seen.has(it.goodText)){seen.add(it.goodText);items.push(it);}}
+ const wi=Math.floor(Math.random()*3);
+ const shown=items.map((it,i)=>i===wi?it.bad:it.good);
+ const it=items[wi];
+ return{type:'error',lvl:L,prompt:"Trova l'errore",hint:'Una frase è sbagliata · One phrase is wrong',items:shown,wrongIdx:wi,
+  answer:String(wi),why:`${it.badText} → ${it.goodText}`,rule:it.rule,gloss:it.gloss};}
+
+function qBuild(L){
+ let tokens,why,rule,gloss;
+ if(L===6&&Math.random()<.5){
+   const x=bq('quello');const s=bqSentence(x);tokens=s.tokens.map(t=>({...t}));
+   why=whyBQ(x.w,x.g,x.num,x.form);rule=RULE_BQ.quello;gloss=bqGloss(x);
+   if(!s.sentence){const a=rnd(SENT_ADJ.filter(a=>compat(x.n,a)).concat([byW('grande')]));
+     const f=adjForm(a,x.g,x.num);tokens=capFirst([...bqToks(x),verbTok(x.num),{t:f,en:a.en,post:'.'}]);}
+ }else{
+   const b=adjBase(L,{sentence:true});tokens=b.mk({t:b.form,en:b.a.en});why=b.why;rule=b.rule;gloss=b.gloss;}
+ // tiles: lowercase, without punctuation
+ const lower=tokens.map((t,i)=>({t:i===0?t.t.charAt(0).toLowerCase()+t.t.slice(1):t.t,en:t.en}));
+ // keep original case for names? none. fine.
+ const target=plainText(lower);
+ return{type:'build',lvl:L,prompt:'Costruisci la frase',hint:'Soggetto + è/sono + aggettivo · Subject + verb + adjective',
+  tiles:shuffle(lower.map((t,i)=>({id:i,t:t.t}))),answer:target,full:plainText(tokens),why,rule,gloss};}
+
+function makeQ(type,level){
+ const L=level||rnd([1,2,3,4,5,6]);
+ switch(type){case 'complete':return qComplete(L);case 'choose':return qChoose(L);case 'transform':return qTransform(L);
+  case 'error':return qError(L);case 'build':return qBuild(L);}
+ return qChoose(L);}
+const qKey=q=>q.type+'|'+(q.tokens?plainText(q.tokens):q.items?q.items.map(plainText).join('/'):q.answer)+'|'+q.answer;
+function makeSet(type,level,n=10){
+ const out=[],seen=new Set();let guard=0;
+ while(out.length<n&&guard++<400){const q=makeQ(type,level);const k=qKey(q);if(!seen.has(k)){seen.add(k);out.push(q);}}
+ return out;}
+
+/* ============ THEORY ============ */
+const tbl=(rows,head=['m. sing.','f. sing.','m. plur.','f. plur.'])=>
+ `<table><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map((c,i)=>`<td${i===0&&head.length===2?' class="k"':(i===0&&head[0]==='regola'?' class="nw"':'')}>${c}</td>`).join('')}</tr>`).join('')}</table>`;
+const THEORY={
+1:{title:'-o / -a',html:`
+ <p>Adjectives in <b>-o</b> have <b>four forms</b>. They agree with the noun in <b>gender</b> and <b>number</b>.</p>
+ ${tbl([['alto','alta','alti','alte'],['nuovo','nuova','nuovi','nuove'],['rosso','rossa','rossi','rosse']])}
+ <p class="ex">il ragazzo alto · la ragazza alta<br>i ragazzi alti · le ragazze alte</p>
+ <div class="tip">Nouns: -o → plural -i, -a → plural -e. The adjective usually comes <b>after</b> the noun.<br>Adjectives in <b>-io</b> keep one <b>i</b>: <i>vecchio, vecchia, vecchi, vecchie</i>.</div>`},
+2:{title:'Nomi in -e',html:`
+ <p>Nouns in <b>-e</b> can be masculine or feminine: the ending does not tell you. <b>Learn them with the article</b>: <i>il fiore</i>, <i>la notte</i>. The plural is always <b>-i</b>.</p>
+ ${tbl([['il fiore rosso','i fiori rossi'],['la notte fredda','le notti fredde'],['il dottore bravo','i dottori bravi'],['la lezione nuova','le lezioni nuove']],['singolare','plurale'])}
+ <div class="tip">The adjective follows the <b>gender of the noun</b>, not its ending: <i>la notte</i> is feminine → <i>fredda</i>.</div>`},
+3:{title:'Aggettivi in -e',html:`
+ <p>Adjectives in <b>-e</b> have <b>two forms</b> only: <b>-e</b> (singular) and <b>-i</b> (plural). Masculine and feminine are the same.</p>
+ ${tbl([['grande','grande','grandi','grandi'],['verde','verde','verdi','verdi'],['gentile','gentile','gentili','gentili']])}
+ <p class="ex">un libro grande · una casa grande<br>due libri grandi · due case grandi</p>
+ <p>Adjectives in <b>-ista</b> (ottimista, egoista…) are the same in the singular. In the plural: <b>-i</b> (m.) and <b>-e</b> (f.).</p>
+ ${tbl([['ottimista','ottimista','ottimisti','ottimiste']])}
+ <div class="tip">Nationalities in <b>-ese</b> (inglese, francese, cinese…) work like <i>grande</i>: <i>inglese → inglesi</i>. Nationalities in -o (italiano, spagnolo…) have four forms.</div>`},
+4:{title:'-co / -go',html:`
+ <p>In the <b>feminine</b> (singular <i>-ca, -ga</i>) the plural always keeps the hard sound with an <b>h</b>: <b>-che, -ghe</b>.</p>
+ <p>In the <b>masculine plural</b>:</p>
+ ${tbl([['-ico → -ici','simpatico','simpatici','simpatiche'],['other -co → -chi','bianco','bianchi','bianche'],['-go → -ghi','lungo','lunghi','lunghe']],['regola','m. sing.','m. plur.','f. plur.'])}
+ <p class="ex">un ragazzo simpatico → due ragazzi simpatici<br>una casa bianca → due case bianche</p>
+ <div class="tip">There are exceptions (amico → amici, greco → greci). They are not in the exercises.</div>`},
+5:{title:'Colori invariabili',html:`
+ <p>Some colours <b>never change</b>: <b>blu, rosa, viola, beige</b>. Compare them with the other colours:</p>
+ ${tbl([['una borsa rossa','due borse rosse'],['una borsa verde','due borse verdi'],['una borsa blu','due borse blu'],['una borsa rosa','due borse rosa']],['singolare','plurale'])}
+ <div class="tip">Rosso, nero, giallo change (four forms). Verde changes (-e / -i). Blu, rosa, viola and beige stay the same.</div>`},
+6:{title:'Casi speciali',html:`
+ <p><b>Special nouns.</b> Check the article and the plural, then make the adjective agree.</p>
+ ${tbl([['nomi in -ma (m.)','il problema → i problemi'],['la mano (f. in -o)','la mano → le mani'],['plurale in -a (f.)','il braccio → le braccia<br>l\'uovo → le uova<br>il dito → le dita'],['femminili accorciati','la foto, la moto, la radio → le foto, le moto, le radio'],['invariabili','il cinema, il caffè, la città, il bar, l\'autobus'],['m. e f. uguali','il/la turista · il/la collega · il/la cantante'],['irregolare','l\'uomo → gli uomini']],['tipo','esempi'])}
+ <p class="ex">le braccia lunghe · le uova fresche · il problema difficile · una collega simpatica</p>
+ <p><b>Bello</b> before the noun follows the definite article:</p>
+ ${tbl([["un <b>bel</b> libro","due <b>bei</b> libri"],["un <b>bello</b> zaino / studente","due <b>begli</b> zaini"],["un <b>bell'</b>albero","due <b>begli</b> alberi"],["una <b>bella</b> casa","due <b>belle</b> case"],["una <b>bell'</b>amica","due <b>belle</b> amiche"]],['singolare','plurale'])}
+ <p><b>Quello</b> works in the same way:</p>
+ ${tbl([["<b>quel</b> libro","<b>quei</b> libri"],["<b>quello</b> zaino / studente","<b>quegli</b> zaini"],["<b>quell'</b>albero","<b>quegli</b> alberi"],["<b>quella</b> casa","<b>quelle</b> case"],["<b>quell'</b>amica","<b>quelle</b> amiche"]],['singolare','plurale'])}
+ <div class="tip">Before a vowel: <i>bell'</i>, <i>quell'</i> (singular), <i>begli</i>, <i>quegli</i> (m. plural). Before s + consonant or z: <i>bello</i>, <i>quello</i>, <i>begli</i>, <i>quegli</i>.</div>`}
+};
+
+/* ============ APP STATE & UI ============ */
+const LEVELS=[
+ {n:1,t:'-o / -a',ex:'la ragazza alta'},
+ {n:2,t:'Nomi in -e',ex:'la notte fredda'},
+ {n:3,t:'Aggettivi in -e',ex:'il libro grande'},
+ {n:4,t:'-co / -go',ex:'le ragazze simpatiche'},
+ {n:5,t:'Colori invariabili',ex:'due borse blu'},
+ {n:6,t:'Casi speciali',ex:'quel bel libro'}];
+const EXERCISES=[
+ {k:'complete',t:'Completa',d:'Scegli la desinenza'},
+ {k:'choose',t:'Scegli',d:'Scegli la forma giusta'},
+ {k:'transform',t:'Trasforma',d:'Singolare ↔ plurale'},
+ {k:'error',t:"Trova l'errore",d:'Quale frase è sbagliata?'},
+ {k:'build',t:'Costruisci',d:'Metti le parole in ordine'},
+ {k:'timed',t:'Sfida a tempo',d:'60 secondi · record',cls:'timed'}];
+const lvlName=l=>l===0?'Tutti i livelli':`Livello ${l} · ${LEVELS[l-1].t}`;
+
+let showEn=store.get('en',false);
+let S=null,advTimer=null,tickTimer=null;
+const app=()=>document.getElementById('app');
+const starsOf=l=>(store.get('stars',{}))[l]||0;
+const starsHTML=n=>`<span class="stars" aria-label="${n} stelle su 3">${[1,2,3].map(i=>i<=n?'<b>★</b>':'★').join('')}</span>`;
+function applyEn(){document.body.classList.toggle('showen',showEn);const t=document.getElementById('enToggle');if(t)t.classList.toggle('on',showEn);}
+
+function openTheory(l){
+ if(l===0)return;
+ const T=THEORY[l];
+ document.getElementById('sheet').innerHTML=`<div class="eyebrow">Teoria · Livello ${l}</div><h2>${esc(T.title)}</h2>${T.html}<button class="btn primary close" data-act="closeTheory">Ho capito · Chiudi</button>`;
+document.getElementById('modal').classList.add('open');document.getElementById('sheet').scrollTop=0;
+ const seen=store.get('seen',{});seen[l]=true;store.set('seen',seen);}
+function closeTheory(){document.getElementById('modal').classList.remove('open');}
+
+function home(){
+ clearTimers();S=null;document.body.classList.remove('insess');
+ let h=`<div class="section-title">Scegli un livello</div><div class="grid">`;
+ LEVELS.forEach(L=>{h+=`<div class="lvl-row"><button class="btn level" data-act="level" data-l="${L.n}"><span class="num">${L.n}</span>
+   <span class="meta"><span class="title">${esc(L.t)}</span><br><span class="ex">${esc(L.ex)}</span></span>${starsHTML(starsOf(L.n))}</button>
+   <button class="btn theory" data-act="theory" data-l="${L.n}" aria-label="Teoria livello ${L.n}">Teoria</button></div>`;});
+ h+=`<button class="btn level mix" data-act="level" data-l="0"><span class="num">★</span><span class="meta"><span class="title">Tutti i livelli</span><br><span class="ex">esercizi misti</span></span></button></div>`;
+ app().innerHTML=h;}
+
+function levelMenu(l){
+ clearTimers();S=null;document.body.classList.remove('insess');
+ const rec=store.get('rec',{})[l]||0;
+ let h=`<button class="back" data-act="home">← Livelli</button>
+ <div class="card" style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+  <div><div class="prompt">${l?`Livello ${l}`:'Misto'}</div><div class="serif" style="font-size:24px">${l?esc(LEVELS[l-1].t):'Tutti i livelli'}</div></div>
+  ${l?starsHTML(starsOf(l)):''}</div>
+  ${l?`<div style="margin-top:12px"><button class="btn theory" data-act="theory" data-l="${l}">📖 Teoria</button></div>`:''}</div>
+ <div class="section-title">Scegli un esercizio</div><div class="grid two">`;
+ EXERCISES.forEach(e=>{h+=`<button class="btn ex-btn ${e.cls||''}" data-act="start" data-l="${l}" data-k="${e.k}"><span class="t">${e.t}</span><span class="d">${e.d}${e.k==='timed'&&rec?` · record ${rec}`:''}</span></button>`;});
+ h+=`</div>`;app().innerHTML=h;
+ if(l&&!store.get('seen',{})[l])openTheory(l);}
+
+function clearTimers(){clearTimeout(advTimer);clearInterval(tickTimer);advTimer=null;tickTimer=null;}
+
+/* ---- session ---- */
+function start(l,k){
+ clearTimers();
+ if(k==='timed'){S={level:l,type:'timed',timed:true,score:0,mistakes:[],t0:Date.now(),dur:60000,q:null,done:false,locked:false};nextTimed();
+   tickTimer=setInterval(tick,100);return;}
+ S={level:l,type:k,queue:makeSet(k,l,10).map(q=>({q,retry:false})),i:0,base:10,baseDone:0,score:0,locked:false};
+ showQ();}
+
+function topbar(extra=''){
+ return`<div class="topbar"><button class="back" data-act="level" data-l="${S.level}">← Esci</button>
+  ${S.level?`<button class="btn small theory" data-act="theory" data-l="${S.level}">📖 Teoria</button>`:''}${extra}</div>`;}
+
+function showQ(){
+ document.body.classList.add('insess');
+ const item=S.queue[S.i];if(!item){return finish();}
+ const q=item.q;S.cur=item;S.locked=false;S.built=[];
+ const pct=Math.round(S.baseDone/S.base*100);
+ let h=topbar()+`<div class="progress"><i style="width:${pct}%"></i></div><div class="card">
+  <div class="prompt">${item.retry?'Ripasso · ':''}${esc(q.prompt)}${S.level===0?` · livello ${q.lvl}`:''}</div><div class="hint">${esc(q.hint)}</div>`;
+ h+=renderQ(q);
+ h+=`<div id="fb"></div></div><div class="hint" style="margin-top:8px;text-align:center">${Math.min(S.baseDone+1,S.base)} / ${S.base}</div>`;
+ app().innerHTML=h;
+ const inp=document.getElementById('typed');if(inp)inp.focus();}
+
+function renderQ(q,{tips=true}={}){
+ if(q.type==='complete'||q.type==='choose'){
+   return`<div class="q" id="qtxt">${toHTML(q.tokens,{tips})}</div><div class="opts">${q.options.map((o,i)=>`<button class="opt" data-act="opt" data-v="${esc(o.val)}">${esc(o.label)}</button>`).join('')}</div>`;}
+ if(q.type==='transform'){
+   return`<div class="q" id="qtxt">${toHTML(q.tokens,{tips})}</div><div class="q" style="margin-top:-6px"><span class="arrow">→</span>${toHTML(q.tokens2)}</div>
+   <div class="actions"><button class="btn primary" data-act="checkTyped">Controlla</button></div>`;}
+ if(q.type==='error'){
+   return q.items.map((t,i)=>`<button class="err-item" data-act="errpick" data-v="${i}">${toHTML(t,{tips:false})}</button>`).join('');}
+ if(q.type==='build'){
+   return`<div class="answer-area" id="area"></div><div class="tiles" id="tiles">${q.tiles.map(t=>`<button class="tile" data-act="tile" data-id="${t.id}">${esc(t.t)}</button>`).join('')}</div>
+   <div class="actions"><button class="btn primary" data-act="checkBuild">Controlla</button><button class="btn ghost" data-act="resetBuild">Ricomincia</button></div>`;}
+ return'';}
+
+function fbHTML(ok,q,given){
+ const full=q.type==='build'?q.full:null;
+ let h=`<div class="feedback ${ok?'ok':'no'}"><h3>${ok?'Giusto! ✓':'Non proprio'}</h3>`;
+ if(!ok){
+   if(q.type==='error')h+=`<div class="why"><b>${esc(q.why)}</b></div>`;
+   else if(q.type==='build')h+=`<div class="why">Risposta: <b>${esc(full)}</b></div>`;
+   else h+=`<div class="why">Risposta: <b>${esc(q.type==='complete'?'-'+q.answer:q.answer)}</b></div>`;}
+ if(q.type!=='error'||ok)h+=`<div class="why">${esc(q.why)}</div>`;
+ h+=`<div class="rule">${esc(q.rule)}</div>`;
+ if(q.gloss&&q.gloss.length)h+=`<div class="gloss">${q.gloss.map(g=>`${esc(g[0])} = ${esc(g[1])}`).join(' · ')}</div>`;
+ h+=`<div class="actions">${!ok&&S.level?`<button class="btn small theory" data-act="theory" data-l="${q.lvl}">📖 Rivedi la teoria</button>`:''}<button class="btn primary" data-act="next">Avanti →</button></div></div>`;
+ return h;}
+
+function resolve(ok,q){
+ if(S.locked)return;S.locked=true;
+ const item=S.cur;
+ if(!item.retry){S.baseDone++;if(ok)S.score++;
+   if(!ok){const pos=Math.min(S.i+4,S.queue.length);S.queue.splice(pos,0,{q,retry:true});}}
+ document.getElementById('fb').innerHTML=fbHTML(ok,q);
+ if(ok)advTimer=setTimeout(next,1300);}
+function next(){clearTimeout(advTimer);S.i++;showQ();}
+
+function finish(){
+ clearTimers();
+ const sc=S.score,tot=S.base;
+ const stars=sc>=9?3:sc>=7?2:sc>=5?1:0;
+ let better=false;
+ if(S.level>0){const st=store.get('stars',{});if((st[S.level]||0)<stars){st[S.level]=stars;store.set('stars',st);better=true;}}
+ const msg=stars===3?'Perfetto! Livello padroneggiato.':stars===2?'Molto bene! Ancora un po\' di pratica.':stars===1?'Buon inizio. Rivedi la teoria e riprova.':'Rileggi la teoria e riprova: ce la fai!';
+ app().innerHTML=`<div class="card result"><div class="prompt">${esc(lvlName(S.level))}</div><div class="big">${sc} / ${tot}</div>
+  ${S.level?starsHTML(stars):''}<p>${msg}${better?' ★ Nuove stelle!':''}</p>
+  <div class="actions" style="justify-content:center"><button class="btn primary" data-act="start" data-l="${S.level}" data-k="${S.type}">Riprova</button>
+  <button class="btn" data-act="level" data-l="${S.level}">Altro esercizio</button><button class="btn ghost" data-act="home">Livelli</button></div></div>`;}
+
+/* ---- timed ---- */
+function nextTimed(){
+ document.body.classList.add('insess');
+ const q=makeQ(rnd(['complete','choose']),S.level);S.cur={q,retry:false};S.locked=false;
+ const left=Math.max(0,S.dur-(Date.now()-S.t0));
+ app().innerHTML=topbar(`<span class="timer-score" id="ts">${S.score} ✓</span>`)+`<div class="progress time"><i id="tbar" style="width:${left/S.dur*100}%"></i></div>
+ <div class="card"><div class="prompt">${esc(q.prompt)}${S.level===0?` · livello ${q.lvl}`:''}</div><div class="hint" id="tl">${Math.ceil(left/1000)} s</div>${renderQ(q)}<div id="fb"></div></div>`;}
+function tick(){
+ const left=Math.max(0,S.dur-(Date.now()-S.t0));
+ const bar=document.getElementById('tbar'),tl=document.getElementById('tl');
+ if(bar)bar.style.width=(left/S.dur*100)+'%';if(tl)tl.textContent=Math.ceil(left/1000)+' s';
+ if(left<=0)endTimed();}
+function answerTimed(el,v){
+ if(S.locked)return;S.locked=true;const q=S.cur.q,ok=v===q.answer;
+ el.classList.add(ok?'right':'wrong');
+ document.querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(b.dataset.v===q.answer)b.classList.add('right');});
+ const qt=document.getElementById('qtxt');if(qt)qt.innerHTML=toHTML(q.tokens,{fill:{ok}});
+ if(ok){S.score++;const ts=document.getElementById('ts');if(ts)ts.textContent=S.score+' ✓';}
+ else S.mistakes.push(plainText(q.tokens)+'|'+q.rule);
+ advTimer=setTimeout(()=>{if(S&&S.timed&&!S.done)nextTimed();},ok?450:1300);}
+function endTimed(){
+ clearTimers();S.done=true;
+ const rec=store.get('rec',{});const old=rec[S.level]||0;const isRec=S.score>old;if(isRec){rec[S.level]=S.score;store.set('rec',rec);}
+ const miss=S.mistakes.slice(0,8).map(m=>`<div>${esc(m.split('|')[0])}</div>`).join('');
+ app().innerHTML=`<div class="card result"><div class="prompt">Sfida a tempo · ${esc(lvlName(S.level))}</div>
+  <div class="big">${S.score}</div><p>${S.score===1?'risposta giusta':'risposte giuste'} in 60 secondi</p>
+  <p>${isRec?'🏆 Nuovo record personale!':`Il tuo record: ${Math.max(old,S.score)}`}</p>
+  ${miss?`<div class="mistakes"><b style="font-family:Inter;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Da ripassare — la forma giusta</b>${miss}</div>`:''}
+  <div class="actions" style="justify-content:center"><button class="btn primary" data-act="start" data-l="${S.level}" data-k="timed">Riprova</button>
+  <button class="btn" data-act="level" data-l="${S.level}">Altro esercizio</button><button class="btn ghost" data-act="home">Livelli</button></div></div>`;}
+
+/* ---- answer handlers ---- */
+function onOpt(el){
+ if(S.timed)return answerTimed(el,el.dataset.v);
+ if(S.locked)return;const q=S.cur.q,ok=el.dataset.v===q.answer;
+ document.querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(b.dataset.v===q.answer)b.classList.add('right');});
+ if(!ok)el.classList.add('wrong');
+ const qt=document.getElementById('qtxt');if(qt)qt.innerHTML=toHTML(q.tokens,{fill:{ok}});
+ resolve(ok,q);}
+function onTyped(){
+ if(S.locked)return;const inp=document.getElementById('typed');if(!inp||!inp.value.trim())return;
+ const q=S.cur.q,ok=norm(inp.value)===norm(q.answer);
+ inp.disabled=true;inp.style.color=ok?'var(--ok)':'var(--no)';inp.style.borderColor=ok?'var(--ok)':'var(--no)';
+ resolve(ok,q);}
+function onErr(el){
+ if(S.locked)return;const q=S.cur.q,v=+el.dataset.v,ok=v===q.wrongIdx;
+ document.querySelectorAll('.err-item').forEach((b,i)=>{b.disabled=true;if(i===q.wrongIdx)b.classList.add(ok?'right':'reveal');});
+ if(!ok)el.classList.add('wrong');
+ resolve(ok,q);}
+function renderBuilt(){
+ const q=S.cur.q;
+ document.getElementById('area').innerHTML=S.built.map(id=>`<button class="tile" data-act="untile" data-id="${id}">${esc(q.tiles.find(t=>t.id===id).t)}</button>`).join('');
+ document.querySelectorAll('#tiles .tile').forEach(b=>b.classList.toggle('used',S.built.includes(+b.dataset.id)));}
+function onBuild(){
+ if(S.locked)return;const q=S.cur.q;if(!S.built.length)return;
+ const toks=S.built.map(id=>({t:q.tiles.find(t=>t.id===id).t}));
+ const ok=plainText(toks)===q.answer;
+ document.getElementById('area').style.borderColor=ok?'var(--ok)':'var(--no)';
+ resolve(ok,q);}
+
+/* ---- events ---- */
+document.addEventListener('click',e=>{
+ const bub=document.getElementById('bubble');bub.style.display='none';
+ const w=e.target.closest&&e.target.closest('.w');
+ if(w&&showEn){const r=w.getBoundingClientRect();bub.textContent=w.dataset.en;bub.style.display='block';
+   bub.style.left=Math.max(8,Math.min(innerWidth-bub.offsetWidth-8,r.left+r.width/2-bub.offsetWidth/2))+'px';
+   bub.style.top=Math.max(8,r.top-bub.offsetHeight-8)+'px';return;}
+ if(e.target.id==='modal'){closeTheory();return;}
+ const t=e.target.closest('[data-act]');if(!t)return;
+ const act=t.dataset.act,l=+t.dataset.l;
+ switch(act){
+  case 'home':home();break;
+  case 'level':levelMenu(l);break;
+  case 'theory':openTheory(l);break;
+  case 'closeTheory':closeTheory();break;
+  case 'start':start(l,t.dataset.k);break;
+  case 'opt':onOpt(t);break;
+  case 'checkTyped':onTyped();break;
+  case 'errpick':onErr(t);break;
+  case 'tile':if(!S.locked){S.built.push(+t.dataset.id);renderBuilt();}break;
+  case 'untile':if(!S.locked){S.built=S.built.filter(x=>x!==+t.dataset.id);renderBuilt();}break;
+  case 'resetBuild':if(!S.locked){S.built=[];renderBuilt();}break;
+  case 'checkBuild':onBuild();break;
+  case 'next':next();break;
+ }});
+document.addEventListener('keydown',e=>{
+ if(e.key==='Escape')closeTheory();
+ if(e.key==='Enter'){
+  if(document.getElementById('modal').classList.contains('open'))return;
+  if(S&&!S.timed){if(S.locked)next();else if(document.getElementById('typed'))onTyped();}}});
+document.addEventListener('DOMContentLoaded',()=>{});
+function init(){
+ document.getElementById('enToggle').addEventListener('click',()=>{showEn=!showEn;store.set('en',showEn);applyEn();});
+ applyEn();home();}
+if(typeof document!=='undefined'&&document.getElementById('app'))init();
+if(typeof module!=='undefined')module.exports={makeQ,makeSet,forms,ALL_ADJ,ADJ,NOUNS1,NOUNS2,NOUNS6,PAIRS,belloW,quelloW,plainText,adjForm,byW,THEORY,compat};
+</script>
+</body>
+</html>
