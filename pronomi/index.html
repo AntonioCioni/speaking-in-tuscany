@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pronomi · Speaking in Tuscany</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --stone:#EDE8DF; --paper:#F8F5EF; --ink:#2B2A26; --muted:#7C776C;
+    --sage:#5E7355; --sage-d:#47593F; --brick:#A6432E; --brick-l:#C56A54;
+    --line:#D8D1C4; --gold:#C6923A; --ok:#4B6B4A; --no:#A6432E;
+    --shadow:0 2px 10px rgba(43,42,38,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--stone);color:var(--ink);line-height:1.5;
+    -webkit-font-smoothing:antialiased;min-height:100vh;padding:18px 14px 40px;}
+  .wrap{max-width:720px;margin:0 auto;}
+  button{font-family:inherit;cursor:pointer;}
+  .serif{font-family:'Fraunces',Georgia,serif;}
+
+  /* header */
+  header{text-align:center;margin-bottom:16px;}
+  .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--brick);font-weight:600;}
+  .cypress{display:block;margin:6px auto 2px;}
+  h1{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:clamp(30px,7vw,42px);line-height:1.05;}
+  .sub{color:var(--muted);font-size:14px;margin-top:4px;}
+  .toolbar{display:flex;justify-content:flex-end;margin:10px 0 14px;}
+  .toggle{display:inline-flex;align-items:center;gap:8px;background:var(--paper);border:1px solid var(--line);
+    border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600;color:var(--muted);box-shadow:var(--shadow);}
+  .toggle .dot{width:30px;height:18px;border-radius:999px;background:var(--line);position:relative;transition:.2s;}
+  .toggle .dot::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:.2s;}
+  .toggle.on{color:var(--sage-d);border-color:var(--sage);}
+  .toggle.on .dot{background:var(--sage);}
+  .toggle.on .dot::after{left:14px;}
+
+  /* cards & buttons */
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);}
+  .grid{display:grid;gap:12px;}
+  .grid.two{grid-template-columns:1fr 1fr;}
+  @media (max-width:430px){.grid.two{grid-template-columns:1fr 1fr;gap:10px;}}
+  .btn{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:12px;padding:12px 16px;
+    font-size:15px;font-weight:600;transition:.15s;}
+  .btn:hover{border-color:var(--sage);}
+  .btn.primary{background:var(--sage);border-color:var(--sage);color:#fff;}
+  .btn.primary:hover{background:var(--sage-d);}
+  .btn.ghost{background:transparent;}
+  .btn.small{padding:7px 12px;font-size:13px;border-radius:9px;}
+  .btn.theory{color:var(--brick);border-color:var(--brick-l);background:#fff7f3;}
+  .back{background:none;border:none;color:var(--muted);font-size:14px;font-weight:600;padding:6px 0;}
+
+  /* level cards */
+  .level{display:flex;gap:14px;align-items:center;text-align:left;width:100%;padding:14px 16px;}
+  .level .num{flex:none;width:44px;height:44px;border-radius:50%;background:var(--sage);color:#fff;display:grid;place-items:center;
+    font-family:'Fraunces',Georgia,serif;font-size:21px;font-weight:600;}
+  .level.mix .num{background:var(--brick);}
+  .level .meta{flex:1;min-width:0;}
+  .level .title{font-weight:600;font-size:16px;}
+  .level .ex{font-family:'Fraunces',Georgia,serif;font-style:italic;color:var(--muted);font-size:16px;}
+  .stars{font-size:18px;letter-spacing:2px;color:var(--line);white-space:nowrap;}
+  .stars b{color:var(--gold);font-weight:400;}
+  .lvl-row{display:flex;gap:8px;align-items:stretch;}
+  .lvl-row .level{flex:1;}
+  .lvl-row .btn.theory{flex:none;writing-mode:horizontal-tb;padding:0 12px;}
+
+  /* exercise menu */
+  .ex-btn{text-align:left;padding:14px;display:flex;flex-direction:column;gap:2px;min-height:84px;}
+  .ex-btn .t{font-weight:600;font-size:16px;}
+  .ex-btn .d{font-size:12.5px;color:var(--muted);font-weight:400;}
+  .ex-btn.timed{border-color:var(--brick-l);}
+  .section-title{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:4px 2px 10px;}
+
+  /* session */
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;}
+  .progress{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin-bottom:14px;}
+  .progress i{display:block;height:100%;background:var(--sage);transition:width .3s;}
+  .progress.time i{background:var(--brick);transition:width .1s linear;}
+  .prompt{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--brick);font-weight:600;}
+  .hint{font-size:13px;color:var(--muted);margin-bottom:10px;}
+  .q{font-family:'Fraunces',Georgia,serif;font-size:clamp(26px,6.4vw,38px);line-height:1.3;margin:12px 0 18px;font-weight:500;}
+  .q .blank{display:inline-block;min-width:1.6em;border-bottom:3px solid var(--brick);color:var(--brick);text-align:center;padding:0 2px;}
+  .q .blank.right{border-color:var(--ok);color:var(--ok);}
+  .q .blank.wrong{border-color:var(--no);color:var(--no);}
+  body.insess .sub,body.insess .cypress{display:none;}
+  body.insess header{margin-bottom:6px;}
+  body.insess .toolbar{margin:6px 0 8px;}
+  .sheet td.nw{white-space:nowrap;font-size:13px;font-family:'Inter',sans-serif;color:var(--muted);}
+  .q .arrow{color:var(--muted);font-size:.8em;margin-right:6px;}
+  .showen .w{border-bottom:2px dotted var(--sage);cursor:help;}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .opt{padding:16px 10px;font-size:20px;font-family:'Fraunces',Georgia,serif;font-weight:500;border-radius:14px;min-height:60px;
+    background:var(--paper);border:2px solid var(--line);color:var(--ink);}
+  .opt:hover:not(:disabled){border-color:var(--sage);}
+  .opt.right{background:var(--ok);border-color:var(--ok);color:#fff;}
+  .opt.wrong{background:var(--no);border-color:var(--no);color:#fff;}
+  .opt:disabled{cursor:default;}
+  .err-item{display:block;width:100%;text-align:left;padding:14px 16px;font-family:'Fraunces',Georgia,serif;font-size:clamp(20px,5vw,26px);
+    background:var(--paper);border:2px solid var(--line);border-radius:14px;margin-bottom:10px;color:var(--ink);}
+  .err-item:hover:not(:disabled){border-color:var(--sage);}
+  .err-item.right{background:var(--ok);border-color:var(--ok);color:#fff;}
+  .err-item.wrong{background:var(--no);border-color:var(--no);color:#fff;}
+  .err-item.reveal{border-color:var(--ok);box-shadow:0 0 0 2px var(--ok) inset;}
+  input.type{font-family:'Fraunces',Georgia,serif;font-size:inherit;border:none;border-bottom:3px solid var(--brick);background:transparent;
+    width:6.5em;text-align:center;color:var(--ink);outline:none;padding:0 4px;}
+  .answer-area{min-height:64px;border:2px dashed var(--line);border-radius:14px;padding:10px;display:flex;flex-wrap:wrap;gap:8px;
+    margin-bottom:12px;align-items:center;background:var(--paper);}
+  .tiles{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .tile{font-family:'Fraunces',Georgia,serif;font-size:22px;padding:10px 16px;border-radius:12px;background:#fff;border:2px solid var(--line);color:var(--ink);}
+  .tile:hover{border-color:var(--sage);}
+  .tile.used{opacity:.25;pointer-events:none;}
+  .answer-area .tile{background:var(--sage);color:#fff;border-color:var(--sage);}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;}
+  .feedback{margin-top:16px;border-radius:14px;padding:14px 16px;border:1px solid var(--line);background:var(--paper);}
+  .feedback.ok{border-color:var(--ok);background:#eef3ec;}
+  .feedback.no{border-color:var(--brick-l);background:#fbf0ec;}
+  .feedback h3{font-size:17px;margin-bottom:4px;}
+  .feedback.ok h3{color:var(--ok);} .feedback.no h3{color:var(--brick);}
+  .feedback .why{font-size:15px;}
+  .feedback .rule{font-size:13.5px;color:var(--muted);margin-top:4px;}
+  .feedback .gloss{font-size:13px;color:var(--muted);margin-top:4px;font-style:italic;}
+  .feedback .actions{margin-top:12px;}
+  .timer-score{font-family:'Fraunces',Georgia,serif;font-size:22px;}
+
+  /* result */
+  .result{text-align:center;padding:26px 18px;}
+  .result .big{font-family:'Fraunces',Georgia,serif;font-size:56px;line-height:1;margin:8px 0;}
+  .result .stars{font-size:38px;margin:6px 0;}
+  .result p{color:var(--muted);margin-bottom:12px;}
+  .mistakes{text-align:left;margin:14px 0;border-top:1px solid var(--line);padding-top:10px;font-size:15px;}
+  .mistakes div{padding:4px 0;font-family:'Fraunces',Georgia,serif;}
+  .mistakes b{color:var(--ok);font-weight:600;}
+
+  /* modal */
+  #modal{position:fixed;inset:0;background:rgba(43,42,38,.55);display:none;align-items:flex-end;justify-content:center;z-index:50;padding:0;}
+  #modal.open{display:flex;}
+  .sheet{background:var(--paper);width:100%;max-width:680px;max-height:88vh;overflow:auto;border-radius:20px 20px 0 0;padding:20px 20px 28px;}
+  @media (min-width:700px){#modal{align-items:center;} .sheet{border-radius:20px;}}
+  .sheet h2{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:26px;margin-bottom:2px;}
+  .sheet .eyebrow{margin-bottom:6px;}
+  .sheet p{margin:10px 0;font-size:16px;}
+  .sheet table{width:100%;border-collapse:collapse;margin:10px 0;font-size:16px;table-layout:auto;}
+  .sheet th{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:6px 8px;border-bottom:2px solid var(--line);}
+  .sheet td{padding:8px 5px;border-bottom:1px solid var(--line);font-family:'Fraunces',Georgia,serif;font-size:17px;}
+  @media (max-width:420px){.sheet td{font-size:15.5px;padding:8px 4px;}.sheet th{padding:6px 4px;font-size:10.5px;}}
+  .sheet td.k{font-family:'Inter',sans-serif;font-size:13px;color:var(--muted);}
+  .sheet .ex{font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:19px;line-height:1.5;}
+  .sheet .tip{background:#f6ecd5;border-left:4px solid var(--gold);border-radius:8px;padding:10px 12px;font-size:15px;margin:12px 0;}
+  .sheet .close{margin-top:14px;width:100%;}
+
+  #bubble{position:fixed;z-index:60;background:var(--ink);color:#fff;font-size:14px;padding:6px 10px;border-radius:8px;display:none;pointer-events:none;
+    max-width:220px;box-shadow:0 4px 14px rgba(0,0,0,.25);}
+
+  footer{text-align:center;margin-top:30px;color:var(--muted);font-size:12.5px;}
+  footer a{color:var(--brick);text-decoration:none;font-weight:600;}
+  footer .brand{font-family:'Fraunces',Georgia,serif;font-size:15px;color:var(--ink);}
+
+  .dq{font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:clamp(20px,5vw,26px);line-height:1.35;color:var(--muted);margin:10px 0 2px;}
+  .opts.four{grid-template-columns:repeat(4,1fr);}
+  .opts.four .opt{padding:16px 4px;}
+  input.type.wide{width:calc(100% - 1.6em);display:inline-block;text-align:left;font-size:clamp(22px,5.6vw,30px);}
+  .eq{display:block;font-size:.68em;font-style:italic;color:var(--muted);margin-bottom:2px;}
+  .err-item.right .eq,.err-item.wrong .eq{color:rgba(255,255,255,.85);}
+  .opt{font-size:clamp(17px,4.6vw,20px);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Speaking in Tuscany</div>
+    <svg class="cypress" width="70" height="30" viewBox="0 0 70 30" aria-hidden="true">
+      <path d="M0 29 Q18 22 35 25 T70 24" stroke="#D8D1C4" stroke-width="2" fill="none"/>
+      <path d="M22 28 C17 20 18 8 22 1 C26 8 27 20 22 28Z" fill="#47593F"/>
+      <path d="M35 28 C29 18 30 6 35 -2 C40 6 41 18 35 28Z" fill="#5E7355"/>
+      <path d="M48 28 C43 20 44 9 48 3 C52 9 53 20 48 28Z" fill="#47593F"/>
+    </svg>
+    <h1>Pronomi</h1>
+    <div class="sub">Lo, la, li, le, ne al passato prossimo · Direct object pronouns in the past</div>
+  </header>
+  <div class="toolbar"><button class="toggle" id="enToggle" type="button"><span>Mostra inglese</span><span class="dot"></span></button></div>
+  <main id="app"></main>
+  <footer>
+    <div class="brand">Speaking in Tuscany</div>
+    <div><a href="https://www.italianinanghiari.it" target="_blank" rel="noopener">www.italianinanghiari.it</a> · Anghiari, Toscana</div>
+    <div style="margin-top:6px"><a href="../">← Tutte le app</a></div>
+  </footer>
+</div>
+
+<div id="modal" role="dialog" aria-modal="true"><div class="sheet" id="sheet"></div></div>
+<div id="bubble"></div>
+
+<script>
+/* ============ UTIL ============ */
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+const low1=s=>s.charAt(0).toLowerCase()+s.slice(1);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const normAns=s=>String(s).toLowerCase().replace(/[’`´‘]/g,"'").replace(/^\s*s[ìi]\s*,?\s*/,'').replace(/[.!?]+\s*$/,'').replace(/'\s+/g,"'").replace(/\s+/g,' ').trim();
+const store=(()=>{const mem={};return{
+  get(k,d){try{const v=localStorage.getItem('pronomi_'+k);return v==null?(k in mem?mem[k]:d):JSON.parse(v);}catch(e){return k in mem?mem[k]:d;}},
+  set(k,v){mem[k]=v;try{localStorage.setItem('pronomi_'+k,JSON.stringify(v));}catch(e){}}};})();
+
+/* ============ DATA: VERBS ============ */
+// k = kinds of objects the verb takes. irr = irregular participle (only from level 3)
+const V=(inf,pp,en,k,irr=false)=>({inf,pp,en,k,irr,stem:pp.slice(0,-1)});
+const VERBS=[
+ V('mangiare','mangiato','to eat','F'),
+ V('comprare','comprato','to buy','FDRCGT'),
+ V('guardare','guardato','to watch','VQ'),
+ V('ascoltare','ascoltato','to listen to','A'),
+ V('trovare','trovato','to find','GTC'),
+ V('dimenticare','dimenticato','to forget','GTK'),
+ V('prenotare','prenotato','to book','Z'),
+ V('lavare','lavato','to wash','CL'),
+ V('finire','finito','to finish','RKFV'),
+ V('chiamare','chiamato','to call','P'),
+ V('invitare','invitato','to invite','P'),
+ V('incontrare','incontrato','to meet','P'),
+ V('salutare','salutato','to greet','P'),
+ V('aiutare','aiutato','to help','P'),
+ V('vedere','visto','to see','VPQ',true),
+ V('leggere','letto','to read','R',true),
+ V('scrivere','scritto','to write','X',true),
+ V('prendere','preso','to take','GTND',true),
+ V('perdere','perso','to lose','GTC',true),
+ V('aprire','aperto','to open','OE',true),
+ V('chiudere','chiuso','to close','O',true),
+ V('bere','bevuto','to drink','D',true),
+ V('fare','fatto','to do / to make','KQ',true)
+];
+
+/* ============ DATA: NOUNS ============ */
+// N(singular, plural, gender, defArt sg, defArt pl, kinds, english, extras)
+const N=(s,p,g,ds,dp,k,en,x={})=>({s,p,g,ds,dp,k,en,nosg:!!x.nosg,nopl:!!x.nopl,none:!!x.none,name:!!x.name});
+const NOUNS=[
+ // food
+ N('pizza','pizze','f','la','le','F','pizza'),N('panino','panini','m','il','i','F','sandwich'),
+ N('mela','mele','f','la','le','F','apple'),N('biscotto','biscotti','m','il','i','F','biscuit'),
+ N('torta','torte','f','la','le','F','cake'),N('banana','banane','f','la','le','F','banana'),
+ N('pera','pere','f','la','le','F','pear'),N('arancia','arance','f',"l'",'le','F','orange'),
+ N('patata','patate','f','la','le','F','potato'),N('caramella','caramelle','f','la','le','F','sweet'),
+ N('pomodoro','pomodori','m','il','i','F','tomato'),N('cornetto','cornetti','m','il','i','F','croissant'),
+ N('gelato','gelati','m','il','i','F','ice cream'),N('insalata','insalate','f','la','le','F','salad'),
+ N('pasta','paste','f','la','le','F','pasta',{nopl:true,none:true}),N('carne','carni','f','la','le','F','meat',{nopl:true,none:true}),
+ N('pane','pani','m','il','i','FD','bread',{nopl:true,none:true}),
+ // drinks
+ N('caffè','caffè','m','il','i','D','coffee'),N('tè','tè','m','il','i','D','tea'),
+ N('birra','birre','f','la','le','D','beer'),N('succo','succhi','m','il','i','D','juice'),
+ N('vino','vini','m','il','i','D','wine',{nopl:true,none:true}),N('latte','latti','m','il','i','D','milk',{nopl:true,none:true}),
+ N('acqua','acque','f',"l'",'le','D','water',{nopl:true,none:true}),
+ // readable / writable
+ N('libro','libri','m','il','i','RXO','book'),N('giornale','giornali','m','il','i','RO','newspaper'),
+ N('rivista','riviste','f','la','le','R','magazine'),N('lettera','lettere','f','la','le','RXE','letter'),
+ N('messaggio','messaggi','m','il','i','RX','message'),N('articolo','articoli','m',"l'",'gli','RX','article'),
+ N('storia','storie','f','la','le','RX','story'),N('romanzo','romanzi','m','il','i','RX','novel'),
+ N('fumetto','fumetti','m','il','i','R','comic'),
+ // clothes
+ N('giacca','giacche','f','la','le','C','jacket'),N('camicia','camicie','f','la','le','C','shirt'),
+ N('maglia','maglie','f','la','le','C','sweater'),N('cappello','cappelli','m','il','i','C','hat'),
+ N('gonna','gonne','f','la','le','C','skirt'),N('vestito','vestiti','m','il','i','C','dress'),
+ N('scarpa','scarpe','f','la','le','C','shoe'),
+ // generic objects
+ N('chiave','chiavi','f','la','le','G','key'),N('borsa','borse','f','la','le','GO','bag'),
+ N('penna','penne','f','la','le','G','pen'),N('telefono','telefoni','m','il','i','G','phone'),
+ N('quaderno','quaderni','m','il','i','GO','notebook'),N('occhiali','occhiali','m','gli','gli','G','glasses',{nosg:true}),
+ N('zaino','zaini','m','lo','gli','GO','backpack'),N('ombrello','ombrelli','m',"l'",'gli','G','umbrella'),
+ // tickets, gifts
+ N('biglietto','biglietti','m','il','i','TZ','ticket'),N('regalo','regali','m','il','i','TE','present'),
+ // open / close
+ N('porta','porte','f','la','le','O','door'),N('finestra','finestre','f','la','le','O','window'),
+ N('bottiglia','bottiglie','f','la','le','O','bottle'),N('pacco','pacchi','m','il','i','OE','parcel'),
+ N('scatola','scatole','f','la','le','O','box'),
+ // washables
+ N('macchina','macchine','f','la','le','L','car'),N('piatto','piatti','m','il','i','L','plate'),
+ N('bicchiere','bicchieri','m','il','i','L','glass'),N('tazza','tazze','f','la','le','L','cup'),
+ // video, photos
+ N('film','film','m','il','i','V','film'),N('partita','partite','f','la','le','V','match'),
+ N('programma','programmi','m','il','i','V','programme'),N('spettacolo','spettacoli','m','lo','gli','V','show'),
+ N('foto','foto','f','la','le','Q','photo'),
+ // audio
+ N('canzone','canzoni','f','la','le','A','song'),N('disco','dischi','m','il','i','A','record'),
+ N('notizia','notizie','f','la','le','A','news item'),
+ // tasks
+ N('compito','compiti','m','il','i','K','homework task'),N('esercizio','esercizi','m',"l'",'gli','K','exercise'),
+ N('lavoro','lavori','m','il','i','K','job / work'),N('lezione','lezioni','f','la','le','K','lesson'),
+ // transport
+ N('treno','treni','m','il','i','N','train'),N('autobus','autobus','m',"l'",'gli','N','bus'),
+ N('taxi','taxi','m','il','i','N','taxi'),
+ // bookable
+ N('tavolo','tavoli','m','il','i','Z','table'),N('camera','camere','f','la','le','Z','room'),
+ N('albergo','alberghi','m',"l'",'gli','Z','hotel'),
+ // persons: names (singular only, no article)
+ ...['Marco:m','Paolo:m','Luca:m','Davide:m','Anna:f','Giulia:f','Maria:f','Sara:f','Elena:f'].map(x=>{const [n,g]=x.split(':');return N(n,n,g,'','','P','',{nopl:true,none:true,name:true});}),
+ // persons: common nouns
+ N('ragazzo','ragazzi','m','il','i','P','boy'),N('ragazza','ragazze','f','la','le','P','girl'),
+ N('amico','amici','m',"l'",'gli','P','friend'),N('amica','amiche','f',"l'",'le','P','friend'),
+ N('vicino','vicini','m','il','i','P','neighbour'),N('vicina','vicine','f','la','le','P','neighbour'),
+ N('studente','studenti','m','lo','gli','P','student'),N('studentessa','studentesse','f','la','le','P','student'),
+ N('professore','professori','m','il','i','P','teacher'),N('professoressa','professoresse','f','la','le','P','teacher'),
+ N('cugino','cugini','m','il','i','P','cousin'),N('cugina','cugine','f','la','le','P','cousin'),
+ N('genitori','genitori','m','i','i','P','parents',{nosg:true,none:true}),N('nonni','nonni','m','i','i','P','grandparents',{nosg:true,none:true})
+];
+const compat=(v,n)=>[...v.k].some(c=>n.k.includes(c));
+
+/* ============ GRAMMAR HELPERS ============ */
+const END={ms:'o',fs:'a',mp:'i',fp:'e'};
+const ppForm=(v,g,num)=>v.stem+END[g+num];
+const PRON={ms:'lo',fs:'la',mp:'li',fp:'le'};
+const AUX_Q={tu:'hai',voi:'avete',lui:'ha',loro:'hanno'};
+const AUX_A={tu:'ho',voi:'abbiamo',lui:'ha',loro:'hanno'};
+const AUX_S={io:'ho',tu:'hai',lui:'ha',noi:'abbiamo',voi:'avete',loro:'hanno'};
+const NAMES=['Marco','Paolo','Luca','Davide','Anna','Giulia','Maria','Sara','Elena'];
+const GROUPS=['i ragazzi','le ragazze','gli studenti','Marco e Anna','i tuoi amici','le tue amiche','i signori Rossi','Paolo e Luca'];
+const NUMQ=['due','tre','quattro','cinque'];
+const QUANT=[['molt','molti','molte'],['poc','pochi','poche'],['tant','tanti','tante'],['tropp','troppi','troppe'],['alcun','alcuni','alcune']];
+const gname=(g,num)=>(g==='m'?'masculine':'feminine')+' '+(num==='s'?'singular':'plural');
+
+function nounToks(n,num){
+ if(n.name)return[{t:n.s}];
+ const art=num==='s'?n.ds:n.dp;
+ return[{t:art},{t:num==='s'?n.s:n.p,en:n.en}];}
+const npText=(n,num)=>n.name?n.s:(num==='s'?n.ds:n.dp)+(/'$/.test(num==='s'?n.ds:n.dp)?'':' ')+(num==='s'?n.s:n.p);
+
+const plainText=tokens=>tokens.map((tk,i)=>(i&&!/'$/.test(tokens[i-1].t)?' ':'')+(tk.blank&&tk.fill?tk.fill:tk.t)+(tk.post||'')).join('');
+function capFirst(tokens){const c=tokens.map(x=>({...x}));c[0].t=cap(c[0].t);return c;}
+function toHTML(tokens,{tips=true,fill=null}={}){
+ let h='';
+ tokens.forEach((tk,i)=>{
+  if(i&&!/'$/.test(tokens[i-1].t))h+=' ';
+  const post=tk.post||'';
+  if(tk.input){h+=`<input class="type wide" id="typed" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="risposta">${esc(post)}`;return;}
+  if(tk.blank){
+    if(fill)h+=`<span class="blank right">${esc(tk.fill)}</span>${esc(post)}`;
+    else h+=`<span class="blank">${esc(tk.t)}</span>${esc(post)}`;
+    return;}
+  if(tk.en&&tips)h+=`<span class="w" data-en="${esc(tk.en)}">${esc(tk.t)}</span>${esc(post)}`;
+  else h+=esc(tk.t)+esc(post);
+ });
+ return h;}
+
+/* ============ ITEM GENERATOR ============ */
+function genItem(L){
+ const mode=L===1?'lola':L===2?'lile':L===3?rnd(['lola','lile']):L===4?'ne':rnd(['lola','lile','ne']);
+ const irr=L>=3;
+ const num=mode==='lola'?'s':'p';
+ let v,n,guard=0;
+ do{
+  v=rnd(VERBS.filter(x=>irr||!x.irr));
+  const pool=NOUNS.filter(x=>compat(v,x)&&(num==='s'?!x.nosg:!x.nopl)&&!(mode==='ne'&&(x.nosg||x.nopl||x.name||x.s==='genitori'||x.s==='nonni')));
+  n=pool.length?rnd(pool):null;
+ }while(!n&&guard++<50);
+ const person=rnd(['tu','tu','voi','lui','lui','loro']);
+ const it={mode,L,v,n,num,g:n.g,person};
+ if(person==='lui'){it.subj=rnd(NAMES.filter(x=>x!==n.s));}
+ if(person==='loro'){it.subj=rnd(GROUPS.filter(x=>x!==npText(n,'p')));}
+ if(mode==='ne'){
+  if(Math.random()<.5)it.qty=rnd(NUMQ);
+  else{const q=rnd(QUANT);it.qty=n.g==='m'?q[1]:q[2];}
+ }
+ return it;}
+
+const gOf=it=>it.g+it.num;
+function pronForm(it){ // lo/la -> l'
+ const key=gOf(it);
+ return (key==='ms'||key==='fs')?"l'":PRON[key];}
+function askToks(it){
+ const {v,n,person,subj,mode}=it;
+ const ppb={t:v.pp,en:v.en};
+ if(mode==='ne'){
+  const quanti=n.g==='m'?'Quanti':'Quante';
+  const t=[{t:quanti},{t:n.p,en:n.en}];
+  if(person==='tu'||person==='voi')t.push({t:AUX_Q[person]},ppb);
+  else t.push({t:AUX_Q[person]},ppb,{t:subj});
+  t[t.length-1]={...t[t.length-1],post:'?'};return t;}
+ const t=[];
+ if(person==='lui'||person==='loro')t.push({t:subj});
+ t.push({t:person==='voi'?'Avete':person==='tu'?'Hai':AUX_Q[person]},ppb,...nounToks(n,it.num));
+ if(person==='tu'||person==='voi'){t[0]={...t[0]};}
+ t[t.length-1]={...t[t.length-1],post:'?'};
+ return capFirst(t);}
+function answerParts(it,pp){ // tokens of the answer without "Sì," and without punctuation
+ const aux=it.aux||AUX_A[it.person];
+ const ppt={t:pp,en:it.v.en};
+ if(it.mode==='ne')return[{t:'ne'},{t:aux},ppt,{t:it.qty}];
+ return[{t:pronForm(it)},{t:aux},ppt];}
+function ansToks(it,{blank=false,pp=null}={}){
+ const good=ppForm(it.v,it.g,it.num);
+ const parts=answerParts(it,pp||good);
+ const pi=2;
+ if(blank)parts[pi]={t:it.v.stem+'__',blank:true,fill:good,en:it.v.en};
+ parts[parts.length-1]={...parts[parts.length-1],post:'.'};
+ return it.mode==='ne'?capFirst(parts):[{t:'Sì,'},...parts];}
+function ruleOf(it){
+ if(it.mode==='lola')return "Lo / la become l' before ho, hai, ha, abbiamo, avete, hanno. The participle agrees with the object: -o (masculine) · -a (feminine).";
+ if(it.mode==='lile')return "Li / le never become l'. The participle agrees with the object: -i (masculine plural) · -e (feminine plural).";
+ return "Ne replaces the thing you count and goes before ho, hai, ha… The participle agrees with the thing counted: -o · -a · -i · -e.";}
+function whyOf(it){
+ const good=ppForm(it.v,it.g,it.num);
+ const full=plainText(answerParts(it,good));
+ if(it.mode==='ne')return `${it.n.p} = ${gname(it.g,'p')} → ${full} (-${END[it.g+'p']})`;
+ const who=it.n.name?`${it.n.s} = `:`${npText(it.n,it.num)} = `;
+ return `${who}${gname(it.g,it.num)} → ${full}`;}
+function glossOf(it){
+ const g=[[it.v.inf,it.v.en]];
+ if(!it.n.name)g.push([it.num==='s'?it.n.s:it.n.p,it.n.en]);
+ return g;}
+const otherEnds=(it,exclude)=>['o','a','i','e'].filter(e=>e!==exclude);
+
+/* ============ QUESTIONS ============ */
+function qComplete(L){
+ const it=genItem(L);
+ const good=ppForm(it.v,it.g,it.num);
+ const end=good.slice(it.v.stem.length);
+ const opts=['o','a','i','e'];
+ return{type:'complete',lvl:L,prompt:'Completa',hint:'Scegli la desinenza del participio · Choose the participle ending',
+  ask:askToks(it),tokens:ansToks(it,{blank:true}),options:opts.map(x=>({label:'-'+x,val:x})),answer:end,
+  why:whyOf(it),rule:ruleOf(it),gloss:glossOf(it)};}
+
+function fullAnswer(it,g,num){
+ const pp=ppForm(it.v,g,num);
+ const aux=AUX_A[it.person];
+ if(it.mode==='ne')return cap(plainText([{t:'ne'},{t:aux},{t:pp},{t:it.qty}]))+'.';
+ const key=g+num;const pr=(key==='ms'||key==='fs')?"l'":PRON[key];
+ return cap(plainText([{t:pr},{t:aux},{t:pp}]))+'.';}
+function qChoose(L){
+ const it=genItem(L);
+ const forms=it.mode==='ne'
+  ?['ms','fs','mp','fp'].map(k=>fullAnswer(it,k[0],k[1]))
+  :['ms','fs','mp','fp'].map(k=>fullAnswer(it,k[0],k[1]));
+ const answer=fullAnswer(it,it.g,it.num);
+ return{type:'choose',lvl:L,prompt:'Scegli la risposta',hint:'Scegli la risposta giusta · Choose the right answer',
+  tokens:askToks(it),options:shuffle(forms).map(v=>({label:v,val:v})),answer,
+  why:whyOf(it),rule:ruleOf(it),gloss:glossOf(it)};}
+
+function stmtToks(it,personS){
+ const {v,n}=it;
+ const aux=AUX_S[personS];
+ const ppb={t:v.pp,en:v.en};
+ let t=[];
+ if(personS==='lui')t.push({t:it.subj});
+ if(personS==='loro')t.push({t:it.subj});
+ t.push({t:aux},ppb);
+ if(it.mode==='ne')t.push({t:it.qty},{t:n.p,en:n.en});
+ else t.push(...nounToks(n,it.num));
+ t[t.length-1]={...t[t.length-1],post:'.'};
+ return capFirst(t);}
+function qTransform(L){
+ const it=genItem(L);
+ const personS=rnd(['io','tu','lui','noi','voi','loro']);
+ // adapt person for subject names
+ if(personS==='lui'&&!it.subj)it.subj=rnd(NAMES.filter(x=>x!==it.n.s));
+ if(personS==='loro'&&!it.subj)it.subj=rnd(GROUPS.filter(x=>x!==npText(it.n,'p')));
+ if(personS==='loro'&&NAMES.includes(it.subj))it.subj=rnd(GROUPS.filter(x=>x!==npText(it.n,'p')));
+ if(personS==='lui'&&!NAMES.includes(it.subj))it.subj=rnd(NAMES.filter(x=>x!==it.n.s));
+ const aux=AUX_S[personS];
+ const good=ppForm(it.v,it.g,it.num);
+ const parts=it.mode==='ne'?[{t:'ne'},{t:aux},{t:good},{t:it.qty}]:[{t:pronForm(it)},{t:aux},{t:good}];
+ const answer=cap(plainText(parts))+'.';
+ return{type:'transform',lvl:L,prompt:'Sostituisci con il pronome',hint:'Scrivi la frase con il pronome · Rewrite the sentence with the pronoun',
+  tokens:stmtToks(it,personS),tokens2:[{t:'',input:true}],answer,
+  why:whyOf({...it,aux}),rule:ruleOf(it),gloss:glossOf(it)};}
+
+function errItem(L){
+ const it=genItem(L);
+ const goodTxt=fullAnswer(it,it.g,it.num);
+ let badTxt=goodTxt,why,rule;
+ const aux=AUX_A[it.person];
+ const np=it.n.name?it.n.s:npText(it.n,it.num);
+ if(it.mode==='lola'){
+  if(Math.random()<.65){
+   const g2=it.g==='m'?'f':'m';badTxt=fullAnswer({...it},g2,'s');
+   badTxt=cap(plainText([{t:"l'"},{t:aux},{t:ppForm(it.v,g2,'s')}]))+'.';
+   rule=`${np} = ${gname(it.g,'s')} → the participle ends in -${END[it.g+'s']}.`;
+  }else{
+   badTxt=cap(plainText([{t:PRON[it.g+'s']},{t:aux},{t:ppForm(it.v,it.g,'s')}]))+'.';
+   rule=`Lo and la always become l' before ${aux}.`;}
+ }else if(it.mode==='lile'){
+  const r=Math.random(),pr=PRON[it.g+'p'];
+  if(r<.4){
+   badTxt=cap(plainText([{t:pr},{t:aux},{t:ppForm(it.v,it.g,'s')}]))+'.';
+   rule=`${np} = ${gname(it.g,'p')} → the participle ends in -${END[it.g+'p']}.`;
+  }else if(r<.75){
+   const g2=it.g==='m'?'f':'m';
+   badTxt=cap(plainText([{t:pr},{t:aux},{t:ppForm(it.v,g2,'p')}]))+'.';
+   rule=`${np} = ${gname(it.g,'p')} → the participle ends in -${END[it.g+'p']}.`;
+  }else{
+   badTxt=cap(plainText([{t:"l'"},{t:aux},{t:ppForm(it.v,it.g,'p')}]))+'.';
+   rule=`Li and le never become l'.`;}
+ }else{
+  const wrong=rnd(['ms','fs','mp','fp'].filter(k=>k!==it.g+'p'));
+  badTxt=cap(plainText([{t:'ne'},{t:aux},{t:ppForm(it.v,wrong[0],wrong[1])},{t:it.qty}]))+'.';
+  rule=`With ne the participle agrees with the thing counted: ${it.n.p} = ${gname(it.g,'p')} → -${END[it.g+'p']}.`;}
+ return{it,good:goodTxt,bad:badTxt,rule,gloss:glossOf(it),ask:askToks(it)};}
+function qError(L){
+ for(let attempt=0;attempt<30;attempt++){
+  const items=[],seen=new Set();let guard=0;
+  while(items.length<3&&guard++<100){const e=errItem(L);if(e.good!==e.bad&&!seen.has(e.good)){seen.add(e.good);items.push(e);}}
+  if(items.length<3)continue;
+  const wi=Math.floor(Math.random()*3);
+  const texts=items.map((e,i)=>i===wi?e.bad:e.good);
+  if(new Set(texts).size<3)continue;
+  const shown=items.map((e,i)=>({ask:e.ask,tokens:[{t:texts[i]}]}));
+  const e=items[wi];
+  return{type:'error',lvl:L,prompt:"Trova l'errore",hint:'Una risposta è sbagliata · One answer is wrong',items:shown,wrongIdx:wi,
+   answer:String(wi),why:`${e.bad} → ${e.good}`,rule:e.rule,gloss:e.gloss};}
+ return qChoose(L);}
+
+function qBuild(L){
+ const it=genItem(L);
+ const good=ppForm(it.v,it.g,it.num);
+ const parts=answerParts(it,good);
+ const target=plainText(parts);
+ const pi=2;
+ const wrongEnd=rnd(['o','a','i','e'].filter(e=>e!==good.slice(it.v.stem.length)));
+ const tiles=parts.map(p=>({t:p.t}));
+ const dis=[{t:it.v.stem+wrongEnd}];
+ if(it.mode==='lola')dis.push({t:it.g==='m'?'lo':'la'});
+ else if(it.mode==='lile')dis.push({t:"l'"});
+ else dis.push({t:it.v.stem+rnd(['o','a','i','e'].filter(e=>e!==wrongEnd&&e!==good.slice(it.v.stem.length)))});
+ const all=shuffle([...tiles,...dis].map((t,i)=>({id:i,t:t.t})));
+ return{type:'build',lvl:L,prompt:'Costruisci la risposta',hint:'Attenzione ai tasselli in più · Watch out for the extra tiles',
+  ask:askToks(it),tiles:all,answer:target,full:plainText(ansToks(it)),
+  why:whyOf(it),rule:ruleOf(it),gloss:glossOf(it)};}
+
+function makeQ(type,level){
+ const L=level||rnd([1,2,3,4,5]);
+ switch(type){case 'complete':return qComplete(L);case 'choose':return qChoose(L);case 'transform':return qTransform(L);
+  case 'error':return qError(L);case 'build':return qBuild(L);}
+ return qChoose(L);}
+const qKey=q=>q.type+'|'+(q.tokens?plainText(q.tokens):q.items?q.items.map(i=>plainText(i.tokens)).join('/'):q.answer)+'|'+q.answer;
+function makeSet(type,level,n=10){
+ const out=[],seen=new Set();let guard=0;
+ while(out.length<n&&guard++<600){const q=makeQ(type,level);const k=qKey(q);if(!seen.has(k)){seen.add(k);out.push(q);}}
+ return out;}
+
+/* ============ THEORY ============ */
+const tbl=(rows,head)=>
+ `<table><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map((c,i)=>`<td${i===0?' class="k"':''}>${c}</td>`).join('')}</tr>`).join('')}</table>`;
+const PERS=[['io','ho'],['tu','hai'],['lui / lei','ha'],['noi','abbiamo'],['voi','avete'],['loro','hanno']];
+const THEORY={
+1:{title:'Lo / la',html:`
+ <p>The direct object pronouns <b>lo</b> (masculine) and <b>la</b> (feminine) replace a <b>singular</b> thing or person. In the passato prossimo they go <b>before</b> avere.</p>
+ ${tbl([['Hai mangiato il panino?',"Sì, <b>l'ho</b> mangiato."],['Hai mangiato la pizza?',"Sì, <b>l'ho</b> mangiata."],['Hai chiamato Marco?',"Sì, <b>l'ho</b> chiamato."],['Hai chiamato Anna?',"Sì, <b>l'ho</b> chiamata."]],['domanda','risposta'])}
+ <p><b>Lo</b> and <b>la</b> always become <b>l'</b> before ho, hai, ha, abbiamo, avete, hanno:</p>
+ ${tbl(PERS.map(p=>[p[0],`l'${p[1]} mangiato`]),['persona','esempio'])}
+ <p>The <b>participle agrees</b> with the object: <b>-o</b> (masculine) · <b>-a</b> (feminine).</p>
+ <div class="tip">L' is the same for masculine and feminine, so the ending of the participle is your clue: <i>l'ho mangiato</i> (il panino) · <i>l'ho mangiata</i> (la pizza).</div>`},
+2:{title:'Li / le',html:`
+ <p><b>Li</b> (masculine plural) and <b>le</b> (feminine plural) replace <b>plural</b> things or people. They go before avere, like lo and la.</p>
+ ${tbl([['Hai comprato i libri?','Sì, <b>li ho</b> comprati.'],['Hai comprato le scarpe?','Sì, <b>le ho</b> comprate.'],['Hai invitato i ragazzi?','Sì, <b>li ho</b> invitati.'],['Hai invitato le amiche?','Sì, <b>le ho</b> invitate.']],['domanda','risposta'])}
+ ${tbl(PERS.map(p=>[p[0],`li ${p[1]} visti · le ${p[1]} viste`]),['persona','esempio'])}
+ <p>The <b>participle agrees</b> with the object: <b>-i</b> (li) · <b>-e</b> (le).</p>
+ <div class="tip"><b>Li</b> and <b>le</b> never become l': <i>li ho visti</i>, <i>le ho viste</i>.</div>`},
+3:{title:'Lo, la, li, le',html:`
+ <p>Two questions: is the object <b>masculine or feminine</b>? <b>Singular or plural</b>?</p>
+ ${tbl([['lo → l\'','-o',"l'ho letto"],['la → l\'','-a',"l'ho letta"],['li','-i','li ho letti'],['le','-e','le ho lette']],['pronome','participio','esempio'])}
+ <p class="ex">Hai letto il libro? → L'ho letto.<br>Avete visto le foto? → Le abbiamo viste.<br>Hanno chiamato i ragazzi? → Li hanno chiamati.</p>
+ <div class="tip"><b>Irregular participles</b> agree in the same way: aprire → aperto · bere → bevuto · chiudere → chiuso · fare → fatto · leggere → letto · perdere → perso · prendere → preso · scrivere → scritto · vedere → visto.<br><i>l'ho visto · l'ho vista · li ho visti · le ho viste</i></div>`},
+4:{title:'Ne',html:`
+ <p><b>Ne</b> replaces the thing or person when you say <b>how many</b>. The quantity stays in the sentence.</p>
+ ${tbl([['Quante mele hai mangiato?','<b>Ne ho</b> mangiate due.'],['Quanti libri hai letto?','<b>Ne ho</b> letti tre.'],['Quanti amici hanno invitato?','<b>Ne hanno</b> invitati molti.']],['domanda','risposta'])}
+ <p><b>Ne</b> never changes: ne ho · ne hai · ne ha · ne abbiamo · ne avete · ne hanno.</p>
+ <p>The <b>participle agrees</b> with the thing you count: mele → <b>-e</b>, libri → <b>-i</b>.</p>
+ <div class="tip">Quantities: due, tre, quattro, cinque · molti / molte · pochi / poche · tanti / tante · troppi / troppe · alcuni / alcune.</div>`},
+5:{title:'Tutti insieme',html:`
+ <p>First choose the pronoun: <b>lo / la</b>, <b>li / le</b> or <b>ne</b>. Then make the participle agree.</p>
+ ${tbl([['Hai visto il film?',"<b>L'ho</b> visto."],['Hai visto la partita?',"<b>L'ho</b> vista."],['Hai visto i film?','<b>Li ho</b> visti.'],['Hai visto le foto?','<b>Le ho</b> viste.'],['Quanti film hai visto?','<b>Ne ho</b> visti tre.']],['domanda','risposta'])}
+ <div class="tip">Is there a <b>quantity</b> (due, tre, molti…)? → <b>ne</b>.<br>Otherwise: <b>lo / la</b> (singular, before avere: l') · <b>li / le</b> (plural).</div>`}
+};
+
+/* ============ APP STATE & UI ============ */
+const LEVELS=[
+ {n:1,t:'Lo / la',ex:"l'ho mangiato · l'ho mangiata"},
+ {n:2,t:'Li / le',ex:'li ho visti · le ho viste'},
+ {n:3,t:'Lo, la, li, le',ex:"l'abbiamo letta · li hanno letti"},
+ {n:4,t:'Ne',ex:'ne ho mangiate due'},
+ {n:5,t:'Tutti insieme',ex:'lo, la, li, le, ne'}];
+const EXERCISES=[
+ {k:'complete',t:'Completa',d:'Scegli la desinenza'},
+ {k:'choose',t:'Scegli',d:'Scegli la risposta giusta'},
+ {k:'transform',t:'Trasforma',d:'Scrivi con il pronome'},
+ {k:'error',t:"Trova l'errore",d:'Quale risposta è sbagliata?'},
+ {k:'build',t:'Costruisci',d:'Metti le parole in ordine'},
+ {k:'timed',t:'Sfida a tempo',d:'60 secondi · record',cls:'timed'}];
+const lvlName=l=>`Livello ${l} · ${LEVELS[l-1].t}`;
+
+let showEn=store.get('en',false);
+let S=null,advTimer=null,tickTimer=null;
+const app=()=>document.getElementById('app');
+const starsOf=l=>(store.get('stars',{}))[l]||0;
+const starsHTML=n=>`<span class="stars" aria-label="${n} stelle su 3">${[1,2,3].map(i=>i<=n?'<b>★</b>':'★').join('')}</span>`;
+function applyEn(){document.body.classList.toggle('showen',showEn);const t=document.getElementById('enToggle');if(t)t.classList.toggle('on',showEn);}
+
+function openTheory(l){
+ if(!l)return;
+ const T=THEORY[l];
+ document.getElementById('sheet').innerHTML=`<div class="eyebrow">Teoria · Livello ${l}</div><h2>${esc(T.title)}</h2>${T.html}<button class="btn primary close" data-act="closeTheory">Ho capito · Chiudi</button>`;
+ document.getElementById('modal').classList.add('open');document.getElementById('sheet').scrollTop=0;
+ const seen=store.get('seen',{});seen[l]=true;store.set('seen',seen);}
+function closeTheory(){document.getElementById('modal').classList.remove('open');}
+
+function home(){
+ clearTimers();S=null;document.body.classList.remove('insess');
+ let h=`<div class="section-title">Scegli un livello</div><div class="grid">`;
+ LEVELS.forEach(L=>{h+=`<div class="lvl-row"><button class="btn level${L.n===5?' mix':''}" data-act="level" data-l="${L.n}"><span class="num">${L.n}</span>
+   <span class="meta"><span class="title">${esc(L.t)}</span><br><span class="ex">${esc(L.ex)}</span></span>${starsHTML(starsOf(L.n))}</button>
+   <button class="btn theory" data-act="theory" data-l="${L.n}" aria-label="Teoria livello ${L.n}">Teoria</button></div>`;});
+ h+=`</div>`;
+ app().innerHTML=h;}
+
+function levelMenu(l){
+ clearTimers();S=null;document.body.classList.remove('insess');
+ const rec=store.get('rec',{})[l]||0;
+ let h=`<button class="back" data-act="home">← Livelli</button>
+ <div class="card" style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+  <div><div class="prompt">Livello ${l}</div><div class="serif" style="font-size:24px">${esc(LEVELS[l-1].t)}</div></div>
+  ${starsHTML(starsOf(l))}</div>
+  <div style="margin-top:12px"><button class="btn theory" data-act="theory" data-l="${l}">📖 Teoria</button></div></div>
+ <div class="section-title">Scegli un esercizio</div><div class="grid two">`;
+ EXERCISES.forEach(e=>{h+=`<button class="btn ex-btn ${e.cls||''}" data-act="start" data-l="${l}" data-k="${e.k}"><span class="t">${e.t}</span><span class="d">${e.d}${e.k==='timed'&&rec?` · record ${rec}`:''}</span></button>`;});
+ h+=`</div>`;app().innerHTML=h;
+ if(!store.get('seen',{})[l])openTheory(l);}
+
+function clearTimers(){clearTimeout(advTimer);clearInterval(tickTimer);advTimer=null;tickTimer=null;}
+
+/* ---- session ---- */
+function start(l,k){
+ clearTimers();
+ if(k==='timed'){S={level:l,type:'timed',timed:true,score:0,mistakes:[],t0:Date.now(),dur:60000,q:null,done:false,locked:false};nextTimed();
+   tickTimer=setInterval(tick,100);return;}
+ S={level:l,type:k,queue:makeSet(k,l,10).map(q=>({q,retry:false})),i:0,base:10,baseDone:0,score:0,locked:false};
+ showQ();}
+
+function topbar(extra=''){
+ return`<div class="topbar"><button class="back" data-act="level" data-l="${S.level}">← Esci</button>
+  <button class="btn small theory" data-act="theory" data-l="${S.level}">📖 Teoria</button>${extra}</div>`;}
+
+function showQ(){
+ document.body.classList.add('insess');
+ const item=S.queue[S.i];if(!item){return finish();}
+ const q=item.q;S.cur=item;S.locked=false;S.built=[];
+ const pct=Math.round(S.baseDone/S.base*100);
+ let h=topbar()+`<div class="progress"><i style="width:${pct}%"></i></div><div class="card">
+  <div class="prompt">${item.retry?'Ripasso · ':''}${esc(q.prompt)}</div><div class="hint">${esc(q.hint)}</div>`;
+ h+=renderQ(q);
+ h+=`<div id="fb"></div></div><div class="hint" style="margin-top:8px;text-align:center">${Math.min(S.baseDone+1,S.base)} / ${S.base}</div>`;
+ app().innerHTML=h;
+ const inp=document.getElementById('typed');if(inp)inp.focus();}
+
+function renderQ(q,{tips=true}={}){
+ const dq=q.ask?`<div class="dq" id="dq">${toHTML(q.ask,{tips})}</div>`:'';
+ if(q.type==='complete'){
+   return`${dq}<div class="q" id="qtxt">${toHTML(q.tokens,{tips})}</div><div class="opts four">${q.options.map(o=>`<button class="opt" data-act="opt" data-v="${esc(o.val)}">${esc(o.label)}</button>`).join('')}</div>`;}
+ if(q.type==='choose'){
+   return`<div class="q" id="qtxt">${toHTML(q.tokens,{tips})}</div><div class="opts">${q.options.map(o=>`<button class="opt" data-act="opt" data-v="${esc(o.val)}">${esc(o.label)}</button>`).join('')}</div>`;}
+ if(q.type==='transform'){
+   return`<div class="q" id="qtxt">${toHTML(q.tokens,{tips})}</div><div class="q" style="margin-top:-6px"><span class="arrow">→</span>${toHTML(q.tokens2)}</div>
+   <div class="actions"><button class="btn primary" data-act="checkTyped">Controlla</button></div>`;}
+ if(q.type==='error'){
+   return q.items.map((it,i)=>`<button class="err-item" data-act="errpick" data-v="${i}"><span class="eq">${toHTML(it.ask,{tips:false})}</span>${toHTML(it.tokens,{tips:false})}</button>`).join('');}
+ if(q.type==='build'){
+   return`${dq}<div class="answer-area" id="area"></div><div class="tiles" id="tiles">${q.tiles.map(t=>`<button class="tile" data-act="tile" data-id="${t.id}">${esc(t.t)}</button>`).join('')}</div>
+   <div class="actions"><button class="btn primary" data-act="checkBuild">Controlla</button><button class="btn ghost" data-act="resetBuild">Ricomincia</button></div>`;}
+ return'';}
+
+function fbHTML(ok,q){
+ let h=`<div class="feedback ${ok?'ok':'no'}"><h3>${ok?'Giusto! ✓':'Non proprio'}</h3>`;
+ if(!ok){
+   if(q.type==='error')h+=`<div class="why"><b>${esc(q.why)}</b></div>`;
+   else if(q.type==='build')h+=`<div class="why">Risposta: <b>${esc(q.full)}</b></div>`;
+   else h+=`<div class="why">Risposta: <b>${esc(q.type==='complete'?'-'+q.answer:q.answer)}</b></div>`;}
+ if(q.type!=='error'||ok)h+=`<div class="why">${esc(q.why)}</div>`;
+ h+=`<div class="rule">${esc(q.rule)}</div>`;
+ if(q.gloss&&q.gloss.length)h+=`<div class="gloss">${q.gloss.map(g=>`${esc(g[0])} = ${esc(g[1])}`).join(' · ')}</div>`;
+ h+=`<div class="actions">${!ok?`<button class="btn small theory" data-act="theory" data-l="${S.level}">📖 Rivedi la teoria</button>`:''}<button class="btn primary" data-act="next">Avanti →</button></div></div>`;
+ return h;}
+
+function resolve(ok,q){
+ if(S.locked)return;S.locked=true;
+ const item=S.cur;
+ if(!item.retry){S.baseDone++;if(ok)S.score++;
+   if(!ok){const pos=Math.min(S.i+4,S.queue.length);S.queue.splice(pos,0,{q,retry:true});}}
+ document.getElementById('fb').innerHTML=fbHTML(ok,q);
+ const fb=document.querySelector('#fb .feedback');if(fb&&fb.scrollIntoView)fb.scrollIntoView({block:'nearest',behavior:'smooth'});}
+function next(){clearTimeout(advTimer);S.i++;showQ();window.scrollTo&&window.scrollTo(0,0);}
+
+function finish(){
+ clearTimers();
+ const sc=S.score,tot=S.base;
+ const stars=sc>=9?3:sc>=7?2:sc>=5?1:0;
+ let better=false;
+ const st=store.get('stars',{});if((st[S.level]||0)<stars){st[S.level]=stars;store.set('stars',st);better=true;}
+ const msg=stars===3?'Perfetto! Livello padroneggiato.':stars===2?'Molto bene! Ancora un po\' di pratica.':stars===1?'Buon inizio. Rivedi la teoria e riprova.':'Rileggi la teoria e riprova: ce la fai!';
+ app().innerHTML=`<div class="card result"><div class="prompt">${esc(lvlName(S.level))}</div><div class="big">${sc} / ${tot}</div>
+  ${starsHTML(stars)}<p>${msg}${better?' ★ Nuove stelle!':''}</p>
+  <div class="actions" style="justify-content:center"><button class="btn primary" data-act="start" data-l="${S.level}" data-k="${S.type}">Riprova</button>
+  <button class="btn" data-act="level" data-l="${S.level}">Altro esercizio</button><button class="btn ghost" data-act="home">Livelli</button></div></div>`;}
+
+/* ---- timed ---- */
+function nextTimed(){
+ document.body.classList.add('insess');
+ const q=makeQ(rnd(['complete','choose']),S.level);S.cur={q,retry:false};S.locked=false;
+ const left=Math.max(0,S.dur-(Date.now()-S.t0));
+ app().innerHTML=topbar(`<span class="timer-score" id="ts">${S.score} ✓</span>`)+`<div class="progress time"><i id="tbar" style="width:${left/S.dur*100}%"></i></div>
+ <div class="card"><div class="prompt">${esc(q.prompt)}</div><div class="hint" id="tl">${Math.ceil(left/1000)} s</div>${renderQ(q)}<div id="fb"></div></div>`;}
+function tick(){
+ const left=Math.max(0,S.dur-(Date.now()-S.t0));
+ const bar=document.getElementById('tbar'),tl=document.getElementById('tl');
+ if(bar)bar.style.width=(left/S.dur*100)+'%';if(tl)tl.textContent=Math.ceil(left/1000)+' s';
+ if(left<=0)endTimed();}
+function answerTimed(el,v){
+ if(S.locked)return;S.locked=true;const q=S.cur.q,ok=v===q.answer;
+ el.classList.add(ok?'right':'wrong');
+ document.querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(b.dataset.v===q.answer)b.classList.add('right');});
+ if(q.type==='complete'){const qt=document.getElementById('qtxt');if(qt)qt.innerHTML=toHTML(q.tokens,{fill:{ok}});}
+ if(ok){S.score++;const ts=document.getElementById('ts');if(ts)ts.textContent=S.score+' ✓';}
+ else S.mistakes.push((q.type==='complete'?plainText(q.tokens.map(t=>t.blank?{...t,fill:t.fill}:t)):q.answer)+'|'+q.rule);
+ advTimer=setTimeout(()=>{if(S&&S.timed&&!S.done)nextTimed();},ok?450:1300);}
+function endTimed(){
+ clearTimers();S.done=true;
+ const rec=store.get('rec',{});const old=rec[S.level]||0;const isRec=S.score>old;if(isRec){rec[S.level]=S.score;store.set('rec',rec);}
+ const miss=S.mistakes.slice(0,8).map(m=>`<div>${esc(m.split('|')[0])}</div>`).join('');
+ app().innerHTML=`<div class="card result"><div class="prompt">Sfida a tempo · ${esc(lvlName(S.level))}</div>
+  <div class="big">${S.score}</div><p>${S.score===1?'risposta giusta':'risposte giuste'} in 60 secondi</p>
+  <p>${isRec?'🏆 Nuovo record personale!':`Il tuo record: ${Math.max(old,S.score)}`}</p>
+  ${miss?`<div class="mistakes"><b style="font-family:Inter;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Da ripassare — la forma giusta</b>${miss}</div>`:''}
+  <div class="actions" style="justify-content:center"><button class="btn primary" data-act="start" data-l="${S.level}" data-k="timed">Riprova</button>
+  <button class="btn" data-act="level" data-l="${S.level}">Altro esercizio</button><button class="btn ghost" data-act="home">Livelli</button></div></div>`;}
+
+/* ---- answer handlers ---- */
+function onOpt(el){
+ if(S.timed)return answerTimed(el,el.dataset.v);
+ if(S.locked)return;const q=S.cur.q,ok=el.dataset.v===q.answer;
+ document.querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(b.dataset.v===q.answer)b.classList.add('right');});
+ if(!ok)el.classList.add('wrong');
+ if(q.type==='complete'){const qt=document.getElementById('qtxt');if(qt)qt.innerHTML=toHTML(q.tokens,{fill:{ok}});}
+ resolve(ok,q);}
+function onTyped(){
+ if(S.locked)return;const inp=document.getElementById('typed');if(!inp||!inp.value.trim())return;
+ const q=S.cur.q,ok=normAns(inp.value)===normAns(q.answer);
+ inp.disabled=true;inp.style.color=ok?'var(--ok)':'var(--no)';inp.style.borderColor=ok?'var(--ok)':'var(--no)';
+ resolve(ok,q);}
+function onErr(el){
+ if(S.locked)return;const q=S.cur.q,v=+el.dataset.v,ok=v===q.wrongIdx;
+ document.querySelectorAll('.err-item').forEach((b,i)=>{b.disabled=true;if(i===q.wrongIdx)b.classList.add(ok?'right':'reveal');});
+ if(!ok)el.classList.add('wrong');
+ resolve(ok,q);}
+function renderBuilt(){
+ const q=S.cur.q;
+ document.getElementById('area').innerHTML=S.built.map(id=>`<button class="tile" data-act="untile" data-id="${id}">${esc(q.tiles.find(t=>t.id===id).t)}</button>`).join('');
+ document.querySelectorAll('#tiles .tile').forEach(b=>b.classList.toggle('used',S.built.includes(+b.dataset.id)));}
+function onBuild(){
+ if(S.locked)return;const q=S.cur.q;if(!S.built.length)return;
+ const toks=S.built.map(id=>({t:q.tiles.find(t=>t.id===id).t}));
+ const ok=plainText(toks)===q.answer;
+ document.getElementById('area').style.borderColor=ok?'var(--ok)':'var(--no)';
+ resolve(ok,q);}
+
+/* ---- events ---- */
+document.addEventListener('click',e=>{
+ const bub=document.getElementById('bubble');bub.style.display='none';
+ const w=e.target.closest&&e.target.closest('.w');
+ if(w&&showEn){const r=w.getBoundingClientRect();bub.textContent=w.dataset.en;bub.style.display='block';
+   bub.style.left=Math.max(8,Math.min(innerWidth-bub.offsetWidth-8,r.left+r.width/2-bub.offsetWidth/2))+'px';
+   bub.style.top=Math.max(8,r.top-bub.offsetHeight-8)+'px';return;}
+ if(e.target.id==='modal'){closeTheory();return;}
+ const t=e.target.closest('[data-act]');if(!t)return;
+ const act=t.dataset.act,l=+t.dataset.l;
+ switch(act){
+  case 'home':home();break;
+  case 'level':levelMenu(l);break;
+  case 'theory':openTheory(l);break;
+  case 'closeTheory':closeTheory();break;
+  case 'start':start(l,t.dataset.k);break;
+  case 'opt':onOpt(t);break;
+  case 'checkTyped':onTyped();break;
+  case 'errpick':onErr(t);break;
+  case 'tile':if(!S.locked){S.built.push(+t.dataset.id);renderBuilt();}break;
+  case 'untile':if(!S.locked){S.built=S.built.filter(x=>x!==+t.dataset.id);renderBuilt();}break;
+  case 'resetBuild':if(!S.locked){S.built=[];renderBuilt();}break;
+  case 'checkBuild':onBuild();break;
+  case 'next':next();break;
+ }});
+document.addEventListener('keydown',e=>{
+ if(e.key==='Escape')closeTheory();
+ if(e.key==='Enter'){
+  if(document.getElementById('modal').classList.contains('open'))return;
+  if(S&&!S.timed){if(S.locked)next();else if(document.getElementById('typed'))onTyped();}}});
+function init(){
+ document.getElementById('enToggle').addEventListener('click',()=>{showEn=!showEn;store.set('en',showEn);applyEn();});
+ applyEn();home();}
+if(typeof document!=='undefined'&&document.getElementById('app'))init();
+if(typeof module!=='undefined')module.exports={makeQ,makeSet,genItem,plainText,VERBS,NOUNS,compat,normAns,THEORY,ppForm,npText};
+
+</script>
+</body>
+</html>

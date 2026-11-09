@@ -51,7 +51,8 @@
 /* ===== PER AGGIUNGERE UNA NUOVA APP: copia una riga qui sotto e cambia i testi.
    href = nome della cartella (con / finale). ===== */
 const APPS=[
-  {title:'Accordo',tag:'A1 – B1',desc:'Nome e aggettivo vanno d\'accordo: teoria ed esercizi su genere e numero.',href:'accordo/'}
+  {title:'Accordo',tag:'A1 – B1',desc:'Nome e aggettivo vanno d\'accordo: teoria ed esercizi su genere e numero.',href:'accordo/'},
+  {title:'Pronomi',tag:'A2',desc:'Lo, la, li, le e ne al passato prossimo: teoria ed esercizi.',href:'pronomi/'}
 ];
 document.getElementById('list').innerHTML=APPS.map(a=>`<a class="card" href="${a.href}"><div class="row"><span class="title">${a.title}</span><span class="tag">${a.tag}</span></div><div class="desc">${a.desc}</div><div class="go">Apri →</div></a>`).join('');
 </script>

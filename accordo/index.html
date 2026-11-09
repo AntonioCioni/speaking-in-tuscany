@@ -675,7 +675,7 @@ function resolve(ok,q){
  if(!item.retry){S.baseDone++;if(ok)S.score++;
    if(!ok){const pos=Math.min(S.i+4,S.queue.length);S.queue.splice(pos,0,{q,retry:true});}}
  document.getElementById('fb').innerHTML=fbHTML(ok,q);
- if(ok)advTimer=setTimeout(next,1300);}
+ }
 function next(){clearTimeout(advTimer);S.i++;showQ();}
 
 function finish(){
